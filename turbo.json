@@ -7,13 +7,23 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**"]
+      "outputs": ["dist/**"]
+    },
+    "start": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "persistent": true
     },
     "lint": {
       "dependsOn": ["^build"]
     },
+    "db:generate": {
+      "cache": false,
+      "outputs": ["node_modules/.prisma/**"]
+    },
     "db:seed": {
-      "cache": false
+      "cache": false,
+      "dependsOn": ["db:generate"]
     }
   }
 }

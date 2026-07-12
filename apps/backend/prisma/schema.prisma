@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+    ADMIN
+    MANAGER
+    STAFF
+}
+
+enum PackageStatus {
+    PENDING
+    IN_TRANSIT
+    DELIVERED
+    CANCELLED
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  username  String?
+  password  String
+  isBanned  Boolean @default(false)
+  warehouseId Int? 
+  role      UserRole @default(STAFF)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  deletedAt DateTime? @db.Timestamptz(3)
+
+  warehouse Warehouse? @relation("WarehouseUser", fields: [warehouseId], references: [id])
+}
+
+model Warehouse {
+ id Int @id @default(autoincrement())
+ name String @unique
+ createdAt DateTime @default(now()) @db.Timestamptz(3)
+ updatedAt DateTime @updatedAt @db.Timestamptz(3)
+ deletedAt DateTime? @db.Timestamptz(3)
+
+ warehouse_user User[] @relation("WarehouseUser")
+ warehouse_package Package[] @relation("WarehousePackage")
+}
+
+model Package {
+ id Int @id @default(autoincrement())
+ code String @unique
+ price Decimal @db.Decimal(15, 2) @default(0)
+ warehouseId Int 
+ status PackageStatus @default(PENDING)
+ version Int @default(0)
+ createdAt DateTime @default(now()) @db.Timestamptz(3)
+ updatedAt DateTime @updatedAt @db.Timestamptz(3)
+ deletedAt DateTime? @db.Timestamptz(3)
+
+ warehouse Warehouse @relation("WarehousePackage", fields: [warehouseId], references: [id])
+
+ @@index([warehouseId, status], name: "idx_package")
+}

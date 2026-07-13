@@ -1,35 +1,41 @@
 import { Request, Response, NextFunction } from "express";
-import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
-import { jwtService } from "@/shared/utils/jwt";
+import { AppError } from "@/shared/errors/AppError";
+import { verifyAccessToken } from "@/shared/utils/jwt";
+import { userRepository } from "@/modules/user/user.repository";
+import { Role } from "@mini-wms/shared-types";
 
 export const authenticate = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader?.startsWith("Bearer ")) {
-    res.status(401).json({ success: false, message: "No token provided" });
-    return;
-  }
-
-  const token = authHeader.split(" ")[1];
-
   try {
-    const payload = jwtService.verifyAccessToken(token);
+    const authHeader = req.headers.authorization;
 
-    req.user = payload;
+    if (!authHeader?.startsWith("Bearer ")) {
+      throw new AppError(401, "No token provided");
+    }
+
+    const token = authHeader.split(" ")[1];
+    const payload = verifyAccessToken(token);
+
+    const user = await userRepository.findUserById(payload.sub);
+    if (!user) {
+      throw new AppError(401, "Account not found");
+    }
+    if (user.isBanned) {
+      throw new AppError(401, "Account disabled");
+    }
+
+    req.user = {
+      sub: user.id,
+      email: user.email,
+      role: user.role as unknown as Role,
+      warehouseId: user.warehouseId,
+    };
+
     next();
   } catch (error) {
-    if (error instanceof TokenExpiredError) {
-      res.status(401).json({ success: false, message: "Token expired" });
-      return;
-    }
-    if (error instanceof JsonWebTokenError) {
-      res.status(401).json({ success: false, message: "Invalid token" });
-      return;
-    }
     next(error);
   }
 };

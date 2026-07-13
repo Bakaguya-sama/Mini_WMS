@@ -1,15 +1,18 @@
-import { Request } from "express";
+import { Role } from "@mini-wms/shared-types";
 
 export interface AccessTokenPayload {
   sub: string;
   email: string;
-  role: "admin" | "manager" | "staff";
+  role: Role;
+}
+
+export interface AuthenticatedUser {
+  sub: string;
+  email: string;
+  role: Role;
+  warehouseId: string | null;
 }
 
 export interface RefreshTokenPayload {
   sub: string;
-}
-
-export interface AuthRequest extends Request {
-  user?: AccessTokenPayload;
 }

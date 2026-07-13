@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 import { ParamsDictionary } from "express-serve-static-core";
+import { AppError } from "@/shared/errors/AppError";
 
 export const validate = <
   T extends z.ZodType<{
@@ -24,12 +25,7 @@ export const validate = <
         message: issue.message,
       }));
 
-      res.status(400).json({
-        success: false,
-        message: "Validation failed",
-        errors,
-      });
-      return;
+      return next(new AppError(400, `Validation failed: ${errors}`));
     }
 
     const data = result.data as z.infer<T>;

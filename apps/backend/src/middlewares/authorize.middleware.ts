@@ -1,27 +1,21 @@
-import { Response, NextFunction } from "express";
-import { AuthRequest } from "@/shared/types/jwt.types";
+import { Request, Response, NextFunction } from "express";
+import { AppError } from "@/shared/errors/AppError";
+import { Role } from "@mini-wms/shared-types";
 
-export const authorize = (
-  ...allowedRole: Array<"admin" | "manager" | "staff">
-) => {
-  return (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authorize = (...allowedRoles: Role[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) {
-      res.status(401).json({ success: false, message: "Unauthorized" });
-      return;
+      return next(new AppError(401, "Unauthorized"));
     }
-
-    if (!allowedRole.includes(req.user.role)) {
-      res
-        .status(403)
-        .json({ success: false, message: "Forbidden: insufficient role" });
-      return;
+    if (!allowedRoles.includes(req.user.role)) {
+      return next(new AppError(403, "Insufficient role"));
     }
 
     next();
   };
 };
 
-export const adminOnly = authorize("admin");
-export const userOnly = authorize("manager");
-export const staffOnly = authorize("staff");
-export const anyUser = authorize("admin", "manager", "staff");
+export const adminOnly = authorize(Role.ADMIN);
+export const managerOnly = authorize(Role.MANAGER);
+export const staffOnly = authorize(Role.STAFF);
+export const anyUser = authorize(Role.ADMIN, Role.MANAGER, Role.STAFF);

@@ -17,6 +17,30 @@ const options: swaggerJsdoc.Options = {
           bearerFormat: "JWT",
         },
       },
+      schemas: {
+        ErrorResponse: {
+          type: "object",
+          required: ["success", "statusCode", "message"],
+          properties: {
+            success: {
+              type: "boolean",
+              example: false,
+            },
+            statusCode: {
+              type: "integer",
+              example: 400,
+            },
+            message: {
+              type: "string",
+              example: "Invalid input data",
+            },
+            stack: {
+              type: "string",
+              nullable: true,
+            },
+          },
+        },
+      },
     },
     security: [{ bearerAuth: [] }],
   },

@@ -4,7 +4,7 @@
   "private": true,
   "license": "ISC",
   "scripts": {
-    "dev": "nodemon tsx watch src/server.ts",
+    "dev": "tsx watch src/server.ts",
     "build": "tsc && tsc-alias",
     "start": "node dist/server.js",
     "db:seed": "tsx prisma/seed.ts",

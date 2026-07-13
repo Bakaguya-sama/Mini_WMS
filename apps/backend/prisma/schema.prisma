@@ -21,12 +21,12 @@ enum PackageStatus {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id String @id @default(uuid()) @db.Uuid
   email     String   @unique
   username  String?
   password  String
   isBanned  Boolean @default(false)
-  warehouseId Int? 
+  warehouseId String? @db.Uuid
   role      UserRole @default(STAFF)
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @db.Timestamptz(3)
@@ -36,7 +36,7 @@ model User {
 }
 
 model Warehouse {
- id Int @id @default(autoincrement())
+ id String @id @default(uuid()) @db.Uuid
  name String @unique
  createdAt DateTime @default(now()) @db.Timestamptz(3)
  updatedAt DateTime @updatedAt @db.Timestamptz(3)
@@ -47,10 +47,10 @@ model Warehouse {
 }
 
 model Package {
- id Int @id @default(autoincrement())
+ id String @id @default(uuid()) @db.Uuid
  code String @unique
  price Decimal @db.Decimal(15, 2) @default(0)
- warehouseId Int 
+ warehouseId String @db.Uuid 
  status PackageStatus @default(PENDING)
  version Int @default(0)
  createdAt DateTime @default(now()) @db.Timestamptz(3)

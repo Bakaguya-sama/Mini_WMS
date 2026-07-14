@@ -2,6 +2,22 @@ import { prisma } from "@/config/db.config";
 import { Prisma } from "generated/prisma";
 import { UserFilter } from "./user.types";
 
+const userSelect = {
+  id: true,
+  email: true,
+  username: true,
+  role: true,
+  isBanned: true,
+  warehouseId: true,
+  createdAt: true,
+  updatedAt: true,
+} satisfies Prisma.UserSelect;
+
+const userSelectWithPassword = {
+  ...userSelect,
+  password: true,
+} satisfies Prisma.UserSelect;
+
 class UserRepository {
   async findUserById(id: string) {
     return await prisma.user.findFirst({
@@ -9,6 +25,7 @@ class UserRepository {
         id,
         deletedAt: null,
       },
+      select: userSelect,
     });
   }
 
@@ -18,6 +35,14 @@ class UserRepository {
         email,
         deletedAt: null,
       },
+      select: userSelect,
+    });
+  }
+
+  async findUserByEmailWithPassword(email: string) {
+    return prisma.user.findFirst({
+      where: { email, deletedAt: null },
+      select: userSelectWithPassword,
     });
   }
 
@@ -47,7 +72,8 @@ class UserRepository {
     const [data, total] = await Promise.all([
       prisma.user.findMany({
         where,
-        skip: page,
+        select: userSelect,
+        skip: (page - 1) * limit,
         take: limit,
         orderBy: {
           createdAt: "desc",
@@ -64,6 +90,7 @@ class UserRepository {
   async createUser(data: Prisma.UserCreateInput) {
     return await prisma.user.create({
       data,
+      select: userSelect,
     });
   }
 
@@ -84,6 +111,7 @@ class UserRepository {
       data: {
         isBanned: true,
       },
+      select: userSelect,
     });
   }
 
@@ -95,11 +123,12 @@ class UserRepository {
       data: {
         isBanned: false,
       },
+      select: userSelect,
     });
   }
 
   async deleteUser(id: string) {
-    return await prisma.user.update({
+    await prisma.user.update({
       where: {
         id,
       },
@@ -111,3 +140,4 @@ class UserRepository {
 }
 
 export const userRepository = new UserRepository();
+export type SafeUser = Prisma.UserGetPayload<{ select: typeof userSelect }>;

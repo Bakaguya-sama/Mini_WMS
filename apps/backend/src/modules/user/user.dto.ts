@@ -27,6 +27,10 @@ export const unbanUserByIdSchema = z.object({
   params: z.object({ id: z.uuidv4() }),
 });
 
+export const deleteUserSchema = z.object({
+  params: z.object({ id: z.uuidv4() }),
+});
+
 export const findUsersByFilterSchema = z.object({
   query: paginationSchema.extend({
     warehouseId: z.uuidv4().optional(),
@@ -46,8 +50,10 @@ export const createUserSchema = z.object({
       warehouseId: z.uuidv4().optional(),
     })
     .refine(
-      (data) =>
-        data.role === Role.ADMIN ? !data.warehouseId : !!data.warehouseId,
+      (data) => {
+        const hasWarehouse = data.warehouseId !== undefined;
+        return data.role === Role.ADMIN ? !hasWarehouse : hasWarehouse;
+      },
       {
         error: "Manager/staff must have a warehouseid, except for Admin",
         path: ["warehouseId"],
@@ -65,3 +71,17 @@ export const updateUserSchema = z.object({
     warehouseId: z.uuidv4().optional(),
   }),
 });
+
+export const updateProfileSchema = z.object({
+  body: z
+    .object({
+      email: emailField.optional(),
+      username: usernameField.optional(),
+      password: passwordField.optional(),
+    })
+    .strict(),
+});
+
+export type CreateUserDto = z.infer<typeof createUserSchema>["body"];
+export type UpdateUserDto = z.infer<typeof updateUserSchema>["body"];
+export type UpdateProfileDto = z.infer<typeof updateUserSchema>["body"];

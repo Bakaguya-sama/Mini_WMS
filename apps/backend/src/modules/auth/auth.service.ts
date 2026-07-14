@@ -6,7 +6,8 @@ import { mapPrismaRole } from "@/shared/utils/mapPrismaRole";
 
 class AuthenticationService {
   async login(email: string, password: string) {
-    const existingUser = await userRepository.findUserByEmail(email);
+    const existingUser =
+      await userRepository.findUserByEmailWithPassword(email);
 
     if (
       !existingUser ||

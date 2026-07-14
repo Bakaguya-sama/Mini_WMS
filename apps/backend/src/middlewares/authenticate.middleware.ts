@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "@/shared/errors/AppError";
-import { verifyAccessToken } from "@/shared/utils/jwt";
+import { jwtService } from "@/shared/utils/jwt";
 import { userRepository } from "@/modules/user/user.repository";
 import { Role } from "@mini-wms/shared-types";
 
@@ -17,7 +17,7 @@ export const authenticate = async (
     }
 
     const token = authHeader.split(" ")[1];
-    const payload = verifyAccessToken(token);
+    const payload = jwtService.verifyAccessToken(token);
 
     const user = await userRepository.findUserById(payload.sub);
     if (!user) {

@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { authenticationService } from "./auth.service";
 import { success } from "@/shared/utils/responseFormatter";
 
-class AuthenticationController {
+class AuthController {
   login() {
     return asyncHandler(async (req: Request, res: Response) => {
       const { email, password } = req.body;
@@ -14,4 +14,4 @@ class AuthenticationController {
   }
 }
 
-export const authenticationController = new AuthenticationController();
+export const authController = new AuthController();

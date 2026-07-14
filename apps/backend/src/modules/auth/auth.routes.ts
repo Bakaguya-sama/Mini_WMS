@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { validate } from "@/middlewares/validate.middleware";
-import { authenticationController } from "./auth.controller";
+import { authController } from "./auth.controller";
 import { loginSchema } from "./auth.dto";
 
 const router = Router();
@@ -87,12 +87,12 @@ const router = Router();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       403:
- *         description: The account has been locked
+ *         description: The account has been banned
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post("/login", validate(loginSchema), authenticationController.login);
+router.post("/login", validate(loginSchema), authController.login());
 
 export default router;

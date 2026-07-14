@@ -24,12 +24,15 @@ class UserService {
     };
   }
 
-  async findUserById(id: string) {
-    const existingUser = await userRepository.findUserById(id);
+  async findUserById(id: string, currentUser: AuthenticatedUser) {
+    const target = await userRepository.findUserById(id);
+    if (!target) throw new AppError(404, "User does not exist");
 
-    if (!existingUser) throw new AppError(404, "User does not exist");
+    if (target.id === currentUser.sub) return this.mapUserToResponse(target);
 
-    return this.mapUserToResponse(existingUser);
+    canManageTarget(currentUser, target);
+
+    return this.mapUserToResponse(target);
   }
 
   async createUser(dto: CreateUserDto, currentUser: AuthenticatedUser) {
@@ -139,9 +142,15 @@ class UserService {
     await userRepository.deleteUser(id);
   }
 
-  async getUsersByFilter(filter: UserFilter) {
+  async getUsersByFilter(filter: UserFilter, currentUser: AuthenticatedUser) {
+    const scopedFilter: UserFilter = { ...filter };
+
+    if (currentUser.role === Role.MANAGER) {
+      scopedFilter.warehouseId = currentUser.warehouseId!;
+    }
+
     const { data, total, page, limit } =
-      await userRepository.findUsersByFilter(filter);
+      await userRepository.findUsersByFilter(scopedFilter);
     return {
       data: data.map((user) => ({ ...user, role: mapPrismaRole(user.role) })),
       total,

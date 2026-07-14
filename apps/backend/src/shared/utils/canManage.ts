@@ -22,5 +22,5 @@ export function canManageTarget(
     throw new AppError(403, "Cannot manage your own");
   }
 
-  throw new AppError(403, "Cannot manage this user");
+  throw new AppError(403, "Cannot access this user");
 }

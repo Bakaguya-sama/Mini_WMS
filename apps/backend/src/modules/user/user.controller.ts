@@ -6,7 +6,10 @@ import { success } from "@/shared/utils/responseFormatter";
 class UserController {
   getUsers() {
     return asyncHandler(async (req: Request, res: Response) => {
-      const result = await userService.getUsersByFilter(req.query as any);
+      const result = await userService.getUsersByFilter(
+        req.query as any,
+        req.user,
+      );
 
       res.status(200).json(success(result));
     });
@@ -15,7 +18,7 @@ class UserController {
   getUserById() {
     return asyncHandler(async (req: Request, res: Response) => {
       const id = req.params.id as string;
-      const result = await userService.findUserById(id);
+      const result = await userService.findUserById(id, req.user);
 
       res.status(200).json(success(result));
     });

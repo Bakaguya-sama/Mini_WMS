@@ -10,7 +10,10 @@ import type {
   UpdateProfileDto,
 } from "./user.dto";
 import { Role } from "@mini-wms/shared-types";
-import { canManageTarget } from "@/shared/utils/canManage";
+import {
+  canManageUserTarget,
+  canViewUserTarget,
+} from "@/shared/utils/canManage";
 import bcrypt from "bcrypt";
 
 class UserService {
@@ -30,7 +33,7 @@ class UserService {
 
     if (target.id === currentUser.sub) return this.mapUserToResponse(target);
 
-    canManageTarget(currentUser, target);
+    canViewUserTarget(currentUser, target);
 
     return this.mapUserToResponse(target);
   }
@@ -67,7 +70,7 @@ class UserService {
     const target = await userRepository.findUserById(id);
     if (!target) throw new AppError(404, "User does not exist");
 
-    canManageTarget(currentUser, target);
+    canManageUserTarget(currentUser, target);
 
     const dataToUpdate = { ...dto };
     if (dto.password) {
@@ -106,7 +109,7 @@ class UserService {
     const target = await userRepository.findUserById(id);
     if (!target) throw new AppError(404, "User does not exist");
 
-    canManageTarget(currentUser, target);
+    canManageUserTarget(currentUser, target);
 
     if (target.id === currentUser.sub) {
       throw new AppError(400, "Cannot ban yourself");
@@ -123,7 +126,7 @@ class UserService {
     const target = await userRepository.findUserById(id);
     if (!target) throw new AppError(404, "User does not exist");
 
-    canManageTarget(currentUser, target);
+    canManageUserTarget(currentUser, target);
 
     if (!target.isBanned) {
       throw new AppError(409, "Account is not banned");
@@ -137,7 +140,7 @@ class UserService {
     const target = await userRepository.findUserById(id);
     if (!target) throw new AppError(404, "User does not exist");
 
-    canManageTarget(currentUser, target);
+    canManageUserTarget(currentUser, target);
 
     await userRepository.deleteUser(id);
   }

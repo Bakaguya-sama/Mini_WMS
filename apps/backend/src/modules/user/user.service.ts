@@ -15,6 +15,7 @@ import {
   canViewUserTarget,
 } from "@/shared/utils/canManage";
 import bcrypt from "bcrypt";
+import { warehouseRepository } from "../warehouse/warehouse.repository";
 
 class UserService {
   mapUserToResponse(user: SafeUser) {
@@ -54,6 +55,13 @@ class UserService {
     const existing = await userRepository.findUserByEmail(dto.email);
     if (existing) throw new AppError(409, "Email already registered");
 
+    if (dto.warehouseId !== undefined) {
+      const warehouse = await warehouseRepository.findWarehouseById(
+        dto.warehouseId,
+      );
+      if (!warehouse) throw new AppError(404, "Warehouse does not exist");
+    }
+
     const hashedPassword = await bcrypt.hash(dto.password, 10);
     const created = await userRepository.createUser({
       ...dto,
@@ -75,6 +83,13 @@ class UserService {
     const dataToUpdate = { ...dto };
     if (dto.password) {
       dataToUpdate.password = await bcrypt.hash(dto.password, 10);
+    }
+
+    if (dto.warehouseId !== undefined) {
+      const warehouse = await warehouseRepository.findWarehouseById(
+        dto.warehouseId,
+      );
+      if (!warehouse) throw new AppError(404, "Warehouse does not exist");
     }
 
     const updated = await userRepository.updateUser(id, dataToUpdate);

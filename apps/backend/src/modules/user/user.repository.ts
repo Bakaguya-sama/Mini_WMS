@@ -80,14 +80,14 @@ class UserRepository {
     return { data, total, page, limit };
   }
 
-  async createUser(data: Prisma.UserCreateInput) {
+  async createUser(data: Prisma.UserUncheckedCreateInput) {
     return await prisma.user.create({
       data,
       select: userSelect,
     });
   }
 
-  async updateUser(id: string, data: Prisma.UserUpdateInput) {
+  async updateUser(id: string, data: Prisma.UserUncheckedUpdateInput) {
     const result = await prisma.user.updateMany({
       where: { id, deletedAt: null },
       data,

@@ -1,8 +1,8 @@
 import { AppError } from "@/shared/errors/AppError";
 import { userRepository, type SafeUser } from "./user.repository";
 import { mapPrismaRole } from "@/shared/utils/mapPrismaRole";
-import { Prisma, User } from "generated/prisma";
-import { UserFilter } from "./user.types";
+import { Prisma } from "generated/prisma";
+import { UserFilter } from "./user.dto";
 import { AuthenticatedUser } from "@/shared/types/jwt.types";
 import type {
   CreateUserDto,

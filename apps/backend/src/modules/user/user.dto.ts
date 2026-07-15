@@ -85,3 +85,4 @@ export const updateProfileSchema = z.object({
 export type CreateUserDto = z.infer<typeof createUserSchema>["body"];
 export type UpdateUserDto = z.infer<typeof updateUserSchema>["body"];
 export type UpdateProfileDto = z.infer<typeof updateUserSchema>["body"];
+export type UserFilter = z.infer<typeof findUsersByFilterSchema>["query"];

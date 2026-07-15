@@ -1,6 +1,6 @@
 import { prisma } from "@/config/db.config";
 import { Prisma } from "generated/prisma";
-import { UserFilter } from "./user.types";
+import { UserFilter } from "./user.dto";
 
 const userSelect = {
   id: true,

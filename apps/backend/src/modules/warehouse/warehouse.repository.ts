@@ -16,6 +16,7 @@ class WarehouseRepository {
         id,
         deletedAt: null,
       },
+      select: warehouseSelect,
     });
   }
 
@@ -29,7 +30,7 @@ class WarehouseRepository {
   }
 
   async findWarehouseByFilter(filter: WarehouseFilter) {
-    const { search, page = 1, limit = 20 } = filter;
+    const { search, page, limit } = filter;
 
     const where: Prisma.WarehouseWhereInput = {
       deletedAt: null,
@@ -41,6 +42,10 @@ class WarehouseRepository {
         where,
         skip: (page - 1) * limit,
         take: limit,
+        orderBy: {
+          name: "asc",
+        },
+        select: warehouseSelect,
       }),
       prisma.warehouse.count({
         where,
@@ -58,6 +63,7 @@ class WarehouseRepository {
   async createWarehouse(data: Prisma.WarehouseCreateInput) {
     return await prisma.warehouse.create({
       data,
+      select: warehouseSelect,
     });
   }
 

@@ -47,14 +47,7 @@ class UserRepository {
   }
 
   async findUsersByFilter(filter: UserFilter) {
-    const {
-      warehouseId,
-      role,
-      isBanned,
-      search,
-      page = 1,
-      limit = 20,
-    } = filter;
+    const { warehouseId, role, isBanned, search, page, limit } = filter;
 
     const where: Prisma.UserWhereInput = {
       deletedAt: null,

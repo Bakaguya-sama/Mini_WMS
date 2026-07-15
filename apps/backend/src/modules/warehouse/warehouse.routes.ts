@@ -1,7 +1,11 @@
 import { Router } from "express";
 import { validate } from "@/middlewares/validate.middleware";
 import { authenticate } from "@/middlewares/authenticate.middleware";
-import { adminOnly, authorize } from "@/middlewares/authorize.middleware";
+import {
+  adminOnly,
+  anyUser,
+  authorize,
+} from "@/middlewares/authorize.middleware";
 import { Role } from "@mini-wms/shared-types";
 import { warehouseController } from "./warehouse.controller";
 import {
@@ -185,7 +189,7 @@ router.get(
  */
 router.get(
   "/:id",
-  authorize(Role.ADMIN, Role.MANAGER, Role.STAFF),
+  anyUser,
   validate(findWarehouseByIdSchema),
   warehouseController.getWarehouseById(),
 );
@@ -319,7 +323,7 @@ router.post(
  */
 router.patch(
   "/:id",
-  authorize(Role.ADMIN),
+  adminOnly,
   validate(updateWarehouseSchema),
   warehouseController.updateWarehouse(),
 );

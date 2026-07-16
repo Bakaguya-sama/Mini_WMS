@@ -8,6 +8,7 @@ import { swaggerSpec } from "./config/swagger.config";
 import authRoute from "@/modules/auth/auth.routes";
 import usersRoute from "@/modules/user/user.routes";
 import warehousesRoute from "@/modules/warehouse/warehouse.routes";
+import packagesRoute from "@/modules/package/package.routes";
 import { AppError } from "./shared/errors/AppError";
 
 const app = express();
@@ -27,6 +28,7 @@ app.use(
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/users", usersRoute);
 app.use("/api/v1/warehouses", warehousesRoute);
+app.use("/api/v1/packages", packagesRoute);
 
 app.use((req, res, next) => {
   next(new AppError(404, `Route ${req.method} ${req.path} not found`));

@@ -3,6 +3,7 @@ import { Role } from "@mini-wms/shared-types";
 import { AppError } from "../errors/AppError";
 import { type SafeUser } from "@/modules/user/user.repository";
 import { type SafeWarehouse } from "@/modules/warehouse/warehouse.repository";
+import { type SafePackage } from "@/modules/package/package.repository";
 
 export function canManageUserTarget(
   currentUser: AuthenticatedUser,
@@ -81,4 +82,66 @@ export function canViewWarehouseTargetIncludingStaff(
   }
 
   throw new AppError(403, "Cannot view this warehouse");
+}
+
+export function canManagePackageTarget(
+  currentUser: AuthenticatedUser,
+  target: SafePackage,
+) {
+  if (currentUser.role === Role.ADMIN) return;
+
+  if (
+    currentUser.role === Role.MANAGER &&
+    target.warehouseId === currentUser.warehouseId
+  ) {
+    return;
+  }
+
+  throw new AppError(403, "Cannot manage this package");
+}
+
+export function canManagePackageTargetIncludingStaff(
+  currentUser: AuthenticatedUser,
+  target: SafePackage,
+) {
+  if (currentUser.role === Role.ADMIN) return;
+
+  if (
+    currentUser.role === Role.MANAGER &&
+    target.warehouseId === currentUser.warehouseId
+  ) {
+    return;
+  }
+
+  if (
+    currentUser.role === Role.STAFF &&
+    target.warehouseId === currentUser.warehouseId
+  ) {
+    return;
+  }
+
+  throw new AppError(403, "Cannot manage this package");
+}
+
+export function canViewPackageTargetIncludingStaff(
+  currentUser: AuthenticatedUser,
+  target: SafePackage,
+) {
+  if (currentUser.role === Role.ADMIN) return;
+
+  if (
+    currentUser.role === Role.MANAGER &&
+    target.warehouseId === currentUser.warehouseId
+  ) {
+    return;
+  }
+
+  if (
+    currentUser.role === Role.STAFF &&
+    target.warehouseId === currentUser.warehouseId
+  ) {
+    return;
+  }
+
+  throw new AppError(403, "Cannot view this package");
 }

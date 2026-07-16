@@ -16,3 +16,10 @@ export interface ApiResponse<T> {
   data?: T;
   error?: { code: string; message: string };
 }
+
+export const VALID_TRANSITIONS: Record<PackageStatus, PackageStatus[]> = {
+  PENDING: ["IN_TRANSIT", "CANCELLED"] as PackageStatus[],
+  IN_TRANSIT: ["DELIVERED", "CANCELLED"] as PackageStatus[],
+  DELIVERED: [],
+  CANCELLED: [],
+};

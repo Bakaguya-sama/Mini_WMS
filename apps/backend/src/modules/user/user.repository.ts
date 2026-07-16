@@ -47,7 +47,16 @@ class UserRepository {
   }
 
   async findUsersByFilter(filter: UserFilter) {
-    const { warehouseId, role, isBanned, search, page, limit } = filter;
+    const {
+      warehouseId,
+      role,
+      isBanned,
+      search,
+      sortOrder,
+      sortBy,
+      page,
+      limit,
+    } = filter;
 
     const where: Prisma.UserWhereInput = {
       deletedAt: null,
@@ -68,9 +77,7 @@ class UserRepository {
         select: userSelect,
         skip: (page - 1) * limit,
         take: limit,
-        orderBy: {
-          createdAt: "desc",
-        },
+        orderBy: { [sortBy]: sortOrder },
       }),
       prisma.user.count({
         where,

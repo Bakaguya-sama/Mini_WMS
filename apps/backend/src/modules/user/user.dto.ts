@@ -2,6 +2,8 @@ import { z } from "zod";
 import { Role } from "@mini-wms/shared-types";
 import { paginationSchema } from "@/shared/dto/pagination.dto";
 
+const sortFields = ["username", "email", "createdAt", "updatedAt"] as const;
+
 const emailField = z.email({ error: "Invalid email format" }).toLowerCase();
 const usernameField = z
   .string({ error: "username is required" })
@@ -37,6 +39,8 @@ export const findUsersByFilterSchema = z.object({
     role: z.enum(Role).optional(),
     isBanned: z.coerce.boolean().optional(),
     search: z.string().min(1).optional(),
+    sortBy: z.enum(sortFields).default("username"),
+    sortOrder: z.enum(["asc", "desc"]).default("desc"),
   }),
 });
 

@@ -176,6 +176,18 @@ router.use(authenticate);
  *         schema:
  *           type: boolean
  *         description: Filter by ban status
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *           enum: [username, email, createdAt, updatedAt]
+ *           default: createdAt
+ *       - in: query
+ *         name: sortOrder
+ *         schema:
+ *           type: string
+ *           enum: [asc, desc]
+ *           default: desc
  *     responses:
  *       200:
  *         description: Users retrieved successfully

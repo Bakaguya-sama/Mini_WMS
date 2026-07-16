@@ -123,7 +123,8 @@ class PackageService {
       throw new AppError(409, "Cannot delete a delivered package");
     }
 
-    await packageRepository.deletePackage(target.id);
+    const deleted = await packageRepository.deletePackage(target.id);
+    if (!deleted) throw new AppError(409, "Cannot delete this package");
   }
 }
 

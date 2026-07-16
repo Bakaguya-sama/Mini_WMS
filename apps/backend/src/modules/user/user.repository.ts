@@ -121,14 +121,17 @@ class UserRepository {
   }
 
   async deleteUser(id: string) {
-    await prisma.user.update({
+    const result = await prisma.user.updateMany({
       where: {
         id,
+        deletedAt: null,
       },
       data: {
         deletedAt: new Date(),
       },
     });
+
+    return result.count > 0;
   }
 }
 

@@ -75,7 +75,8 @@ class WarehouseService {
       );
     }
 
-    await warehouseRepository.deleteWarehouse(id);
+    const deleted = await warehouseRepository.deleteWarehouse(id);
+    if (!deleted) throw new AppError(409, "Cannot delete this warehouse");
   }
 }
 

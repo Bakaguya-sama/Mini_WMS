@@ -81,14 +81,17 @@ class PackageRepository {
   }
 
   async deletePackage(id: string) {
-    return prisma.package.update({
+    const result = await prisma.package.updateMany({
       where: {
         id,
+        deletedAt: null,
       },
       data: {
         deletedAt: new Date(),
       },
     });
+
+    return result.count > 0;
   }
 }
 

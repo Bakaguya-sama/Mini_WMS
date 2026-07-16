@@ -157,7 +157,8 @@ class UserService {
 
     canManageUserTarget(currentUser, target);
 
-    await userRepository.deleteUser(id);
+    const deleted = await userRepository.deleteUser(id);
+    if (!deleted) throw new AppError(409, "Cannot delete this user");
   }
 
   async getUsersByFilter(filter: UserFilter, currentUser: AuthenticatedUser) {

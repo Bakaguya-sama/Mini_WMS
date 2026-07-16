@@ -81,7 +81,7 @@ class WarehouseRepository {
   }
 
   async deleteWarehouse(id: string) {
-    await prisma.warehouse.update({
+    const result = await prisma.warehouse.updateMany({
       where: {
         id,
       },
@@ -89,6 +89,8 @@ class WarehouseRepository {
         deletedAt: new Date(),
       },
     });
+
+    return result.count > 0;
   }
 
   async countRelatedUsers(id: string) {

@@ -49,6 +49,12 @@ export const findPackagesByFilterSchema = z.object({
   }),
 });
 
+export const getTotalOfPackagesByFilterSchema = z.object({
+  query: z.object({
+    warehouseId: z.uuid("Invalid warehouse ID filter").optional(),
+  }),
+});
+
 export const updatePackageSchema = z.object({
   params: z.object({
     id: z.uuid("Invalid package ID"),
@@ -87,3 +93,6 @@ export const deletePackageSchema = z.object({
 export type UpdatePackageDto = z.infer<typeof updatePackageSchema>["body"];
 export type CreatePackageDto = z.infer<typeof createPackageSchema>["body"];
 export type PackageFilter = z.infer<typeof findPackagesByFilterSchema>["query"];
+export type TotalOfPackageFilter = z.infer<
+  typeof getTotalOfPackagesByFilterSchema
+>["query"];

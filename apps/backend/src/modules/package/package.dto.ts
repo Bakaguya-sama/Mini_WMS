@@ -21,9 +21,7 @@ const priceField = z.coerce
   .min(0, "Price must be >= 0")
   .multipleOf(0.01, "Price supports at most 2 decimal places");
 
-const warehouseIdField = z
-  .string({ error: "Warehouse ID is required" })
-  .uuid("Invalid warehouse ID format");
+const warehouseIdField = z.uuid("Invalid warehouse ID format");
 
 const statusField = z.enum(
   [
@@ -37,13 +35,13 @@ const statusField = z.enum(
 
 export const findPackageByIdSchema = z.object({
   params: z.object({
-    id: z.string({ error: "Package ID is required" }).uuid("Invalid package ID"),
+    id: z.uuid("Invalid package ID"),
   }),
 });
 
 export const findPackagesByFilterSchema = z.object({
   query: paginationSchema.extend({
-    warehouseId: z.string().uuid("Invalid warehouse ID filter").optional(),
+    warehouseId: z.uuid("Invalid warehouse ID filter").optional(),
     status: statusField.optional(),
     search: z.string().min(1, "Search term cannot be empty").optional(),
     sortBy: z.enum(sortFields).default("createdAt"),
@@ -53,7 +51,7 @@ export const findPackagesByFilterSchema = z.object({
 
 export const updatePackageSchema = z.object({
   params: z.object({
-    id: z.string({ error: "Package ID is required" }).uuid("Invalid package ID"),
+    id: z.uuid("Invalid package ID"),
   }),
   body: z
     .object({
@@ -82,7 +80,7 @@ export const createPackageSchema = z.object({
 
 export const deletePackageSchema = z.object({
   params: z.object({
-    id: z.string({ error: "Package ID is required" }).uuid("Invalid package ID"),
+    id: z.uuid("Invalid package ID"),
   }),
 });
 

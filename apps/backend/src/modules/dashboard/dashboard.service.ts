@@ -27,6 +27,26 @@ class DashboardService {
       scopedFilter,
     );
   }
+
+  async getPackageStatusReport(
+    filter: FinancialReportFilter,
+    currentUser: AuthenticatedUser,
+  ) {
+    const scopedFilter = { ...filter };
+
+    if (currentUser.role === Role.MANAGER) {
+      scopedFilter.warehouseId = currentUser.warehouseId!;
+    }
+
+    if (scopedFilter.warehouseId) {
+      const warehouse = await warehouseRepository.findWarehouseById(
+        scopedFilter.warehouseId,
+      );
+      if (!warehouse) throw new AppError(404, "Warehouse does not exist");
+    }
+
+    return await packageRepository.getPackageStatusBreakdown(scopedFilter);
+  }
 }
 
 export const dashboardService = new DashboardService();

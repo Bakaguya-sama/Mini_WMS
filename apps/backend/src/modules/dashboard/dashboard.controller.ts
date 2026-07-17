@@ -15,6 +15,17 @@ class DashboardController {
       res.status(200).json(success(result));
     });
   }
+
+  getPackageStatusReport() {
+    return asyncHandler(async (req: Request, res: Response) => {
+      const result = await dashboardService.getPackageStatusReport(
+        req.query as unknown as FinancialReportFilter,
+        req.user,
+      );
+
+      res.status(200).json(success(result));
+    });
+  }
 }
 
 export const dashboardController = new DashboardController();

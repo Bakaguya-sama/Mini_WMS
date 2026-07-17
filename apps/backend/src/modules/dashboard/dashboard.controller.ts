@@ -2,14 +2,14 @@ import { Request, Response } from "express";
 import { asyncHandler } from "@/shared/utils/asyncHandler";
 import { dashboardService } from "./dashboard.service";
 import { success } from "@/shared/utils/responseFormatter";
-import { TotalOfPackageFilter } from "../package/package.dto";
+import { FinancialReportFilter } from "./dashboard.dto";
 
 class DashboardController {
   getFinancialReport() {
     return asyncHandler(async (req: Request, res: Response) => {
       const result = await dashboardService.getFinancialReport(
-        req.query as unknown as TotalOfPackageFilter,
-        req.user!,
+        req.query as unknown as FinancialReportFilter,
+        req.user,
       );
 
       res.status(200).json(success(result));

@@ -1,13 +1,13 @@
 import { AuthenticatedUser } from "@/shared/types/jwt.types";
-import { TotalOfPackageFilter } from "../package/package.dto";
 import { packageRepository } from "../package/package.repository";
+import { FinancialReportFilter } from "./dashboard.dto";
 import { Role } from "@mini-wms/shared-types";
 import { warehouseRepository } from "../warehouse/warehouse.repository";
 import { AppError } from "@/shared/errors/AppError";
 
 class DashboardService {
   async getFinancialReport(
-    filter: TotalOfPackageFilter,
+    filter: FinancialReportFilter,
     currentUser: AuthenticatedUser,
   ) {
     const scopedFilter = { ...filter };

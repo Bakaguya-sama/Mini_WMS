@@ -4,7 +4,7 @@ import { authenticate } from "@/middlewares/authenticate.middleware";
 import { authorize } from "@/middlewares/authorize.middleware";
 import { Role } from "@mini-wms/shared-types";
 import { dashboardController } from "./dashboard.controller";
-import { getTotalOfPackagesByFilterSchema } from "../package/package.dto";
+import { getFinancialReportSchema } from "./dashboard.dto";
 
 const router = Router();
 
@@ -86,7 +86,7 @@ router.use(authenticate);
 router.get(
   "/financial-report",
   authorize(Role.ADMIN, Role.MANAGER),
-  validate(getTotalOfPackagesByFilterSchema),
+  validate(getFinancialReportSchema),
   dashboardController.getFinancialReport(),
 );
 

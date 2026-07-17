@@ -26,6 +26,10 @@ app.use(
   swaggerUi.setup(swaggerSpec),
 );
 
+app.get("/api-docs.json", (req, res) => {
+  res.json(swaggerSpec);
+});
+
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/users", usersRoute);
 app.use("/api/v1/warehouses", warehousesRoute);

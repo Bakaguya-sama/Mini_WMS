@@ -1,7 +1,11 @@
-import { axiosClient } from '@/api/axiosClient'
-import { ENDPOINTS } from '@/api/endpoints'
-import { ApiResponse } from '@/types/common'
-import type { LoginInput, LoginResponseData, RefreshResponseData } from '../types'
+import { axiosClient } from "@/api/axiosClient";
+import { ENDPOINTS } from "@/api/endpoints";
+import { ApiResponse } from "@/types/common";
+import type {
+  LoginInput,
+  LoginResponseData,
+  RefreshResponseData,
+} from "../types";
 
 /**
  * POST /auth/login
@@ -10,9 +14,9 @@ import type { LoginInput, LoginResponseData, RefreshResponseData } from '../type
 export async function login(data: LoginInput): Promise<LoginResponseData> {
   const response = await axiosClient.post<ApiResponse<LoginResponseData>>(
     ENDPOINTS.AUTH.LOGIN,
-    data
-  )
-  return response.data.data
+    data,
+  );
+  return response.data.data;
 }
 
 /**
@@ -21,7 +25,7 @@ export async function login(data: LoginInput): Promise<LoginResponseData> {
  * Returns 204 — no response body.
  */
 export async function logout(): Promise<void> {
-  await axiosClient.post(ENDPOINTS.AUTH.LOGOUT)
+  await axiosClient.post(ENDPOINTS.AUTH.LOGOUT);
 }
 
 /**
@@ -30,11 +34,11 @@ export async function logout(): Promise<void> {
  * Called internally by axiosClient interceptor — exposed here for testing.
  */
 export async function refreshTokens(
-  refreshToken: string
+  refreshToken: string,
 ): Promise<RefreshResponseData> {
   const response = await axiosClient.post<ApiResponse<RefreshResponseData>>(
     ENDPOINTS.AUTH.REFRESH,
-    { refreshToken }
-  )
-  return response.data.data
+    { refreshToken },
+  );
+  return response.data.data;
 }

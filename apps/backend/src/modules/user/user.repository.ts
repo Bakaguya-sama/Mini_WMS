@@ -103,6 +103,20 @@ class UserRepository {
     return this.findUserById(id);
   }
 
+  async setRefreshTokenHash(userId: string, hash: string | null) {
+    return prisma.user.update({
+      where: { id: userId },
+      data: { refreshTokenHash: hash },
+    });
+  }
+
+  async findUserByIdWithRefreshHash(id: string) {
+    return prisma.user.findFirst({
+      where: { id, deletedAt: null },
+      select: { ...userSelect, refreshTokenHash: true },
+    });
+  }
+
   async banUser(id: string) {
     return await prisma.user.update({
       where: {

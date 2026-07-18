@@ -25,6 +25,7 @@ model User {
   email     String   @unique
   username  String   
   password  String
+  refreshTokenHash String?
   isBanned  Boolean @default(false)
   warehouseId String? @db.Uuid
   role      UserRole @default(STAFF)

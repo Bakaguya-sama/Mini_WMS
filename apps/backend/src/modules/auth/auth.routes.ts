@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { validate } from "@/middlewares/validate.middleware";
 import { authController } from "./auth.controller";
-import { loginSchema } from "./auth.dto";
+import { loginSchema, refreshSchema } from "./auth.dto";
+import { authenticate } from "@/middlewares/authenticate.middleware";
 
 const router = Router();
 
@@ -94,5 +95,67 @@ const router = Router();
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post("/login", validate(loginSchema), authController.login());
+
+/**
+ * @openapi
+ * /auth/refresh:
+ *   post:
+ *     summary: Refresh access token
+ *     description: Exchange a valid refresh token for a new access/refresh token pair (rotation).
+ *     tags: [Auth]
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [refreshToken]
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Token refreshed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean, example: true }
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     accessToken: { type: string }
+ *                     refreshToken: { type: string }
+ *       401:
+ *         description: Invalid, expired, or revoked refresh token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.post("/refresh", validate(refreshSchema), authController.refresh());
+
+/**
+ * @openapi
+ * /auth/logout:
+ *   post:
+ *     summary: Logout
+ *     description: Revoke the current refresh token.
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       204:
+ *         description: Logged out successfully
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.post("/logout", authenticate, authController.logout());
 
 export default router;

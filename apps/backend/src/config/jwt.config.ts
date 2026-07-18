@@ -3,13 +3,13 @@ import { env } from "./env.config";
 
 export const jwtConfig = {
   access: {
-    secret: env.JWT_SECRET,
+    secret: env.JWT_ACCESS_SECRET,
     options: {
       expiresIn: "15m",
     } satisfies SignOptions,
   },
   refresh: {
-    secret: env.JWT_SECRET,
+    secret: env.JWT_REFRESH_SECRET,
     options: {
       expiresIn: "7d",
     } satisfies SignOptions,

@@ -18,7 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         position="top-right"
         richColors
         closeButton
-        theme="dark"
+        theme="light"
         toastOptions={{
           style: {
             fontFamily: 'Inter, system-ui, sans-serif',

@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { LogOut, Settings, User } from 'lucide-react'
+import { useState } from "react";
+import { LogOut, Settings, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,33 +7,33 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { useAuthStore } from '@/store/authStore'
-import { useLogout } from '@/features/auth/hooks/useLogout'
-import { Role } from '@/types/common'
-import { ProfileDialog } from './ProfileDialog'
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useAuthStore } from "@/store/authStore";
+import { useLogout } from "@/features/auth/hooks/useLogout";
+import { Role } from "@/types/common";
+import { ProfileDialog } from "./ProfileDialog";
 
 // ─── Role display helpers ─────────────────────────────────────────────────────
 const roleLabel: Record<Role, string> = {
-  [Role.ADMIN]: 'Admin',
-  [Role.MANAGER]: 'Manager',
-  [Role.STAFF]: 'Staff',
-}
+  [Role.ADMIN]: "Admin",
+  [Role.MANAGER]: "Manager",
+  [Role.STAFF]: "Staff",
+};
 
 const roleBadgeClass: Record<Role, string> = {
-  [Role.ADMIN]: 'text-violet-400',
-  [Role.MANAGER]: 'text-blue-400',
-  [Role.STAFF]: 'text-emerald-400',
-}
+  [Role.ADMIN]: "text-violet-400",
+  [Role.MANAGER]: "text-blue-400",
+  [Role.STAFF]: "text-emerald-400",
+};
 
 /** Get initials for avatar fallback (e.g. "John Doe" → "JD") */
 function getInitials(username: string): string {
   return username
     .split(/[\s_-]+/)
     .slice(0, 2)
-    .map((w) => w[0]?.toUpperCase() ?? '')
-    .join('')
+    .map((w) => w[0]?.toUpperCase() ?? "")
+    .join("");
 }
 
 /**
@@ -42,13 +42,13 @@ function getInitials(username: string): string {
  * Opens ProfileDialog when user selects "Cập nhật hồ sơ".
  */
 export function ProfileMenu() {
-  const { user } = useAuthStore()
-  const { mutate: logoutMutate, isPending: isLoggingOut } = useLogout()
-  const [profileOpen, setProfileOpen] = useState(false)
+  const { user } = useAuthStore();
+  const { mutate: logoutMutate, isPending: isLoggingOut } = useLogout();
+  const [profileOpen, setProfileOpen] = useState(false);
 
-  if (!user) return null
+  if (!user) return null;
 
-  const initials = getInitials(user.username)
+  const initials = getInitials(user.username);
 
   return (
     <>
@@ -84,9 +84,6 @@ export function ProfileMenu() {
               <p className="text-xs text-muted-foreground truncate pl-5">
                 {user.email}
               </p>
-              <p className={`text-xs font-semibold pl-5 ${roleBadgeClass[user.role]}`}>
-                {roleLabel[user.role]}
-              </p>
             </div>
           </DropdownMenuLabel>
 
@@ -112,16 +109,13 @@ export function ProfileMenu() {
             className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
           >
             <LogOut className="w-4 h-4 mr-2" />
-            {isLoggingOut ? 'Đang đăng xuất...' : 'Đăng xuất'}
+            {isLoggingOut ? "Đang đăng xuất..." : "Đăng xuất"}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
       {/* Profile edit dialog — controlled by this menu */}
-      <ProfileDialog
-        open={profileOpen}
-        onOpenChange={setProfileOpen}
-      />
+      <ProfileDialog open={profileOpen} onOpenChange={setProfileOpen} />
     </>
-  )
+  );
 }

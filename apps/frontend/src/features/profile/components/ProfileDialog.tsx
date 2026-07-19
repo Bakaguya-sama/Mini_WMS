@@ -1,8 +1,8 @@
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Loader2 } from 'lucide-react'
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Loader2 } from "lucide-react";
 
 import {
   Dialog,
@@ -10,7 +10,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -19,51 +19,47 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { useAuthStore } from '@/store/authStore'
-import { useUpdateProfile } from '../hooks/useUpdateProfile'
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useAuthStore } from "@/store/authStore";
+import { useUpdateProfile } from "../hooks/useUpdateProfile";
 
 // ─── Zod Schema — matches UpdateProfileInput constraints in api-docs.json ─────
 const profileSchema = z
   .object({
-    email: z
-      .string()
-      .email('Email không hợp lệ')
-      .optional()
-      .or(z.literal('')),
+    email: z.string().email("Email không hợp lệ").optional().or(z.literal("")),
     username: z
       .string()
-      .min(3, 'Username phải có ít nhất 3 ký tự')
-      .max(50, 'Username tối đa 50 ký tự')
+      .min(3, "Username phải có ít nhất 3 ký tự")
+      .max(50, "Username tối đa 50 ký tự")
       .optional()
-      .or(z.literal('')),
+      .or(z.literal("")),
     password: z
       .string()
-      .min(6, 'Mật khẩu phải có ít nhất 6 ký tự')
+      .min(6, "Mật khẩu phải có ít nhất 6 ký tự")
       .optional()
-      .or(z.literal('')),
-    confirmPassword: z.string().optional().or(z.literal('')),
+      .or(z.literal("")),
+    confirmPassword: z.string().optional().or(z.literal("")),
   })
   .refine(
     (data) => {
       if (data.password && data.password !== data.confirmPassword) {
-        return false
+        return false;
       }
-      return true
+      return true;
     },
     {
-      message: 'Mật khẩu xác nhận không khớp',
-      path: ['confirmPassword'],
-    }
-  )
+      message: "Mật khẩu xác nhận không khớp",
+      path: ["confirmPassword"],
+    },
+  );
 
-type ProfileFormValues = z.infer<typeof profileSchema>
+type ProfileFormValues = z.infer<typeof profileSchema>;
 
 interface ProfileDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 /**
@@ -72,20 +68,20 @@ interface ProfileDialogProps {
  * Only sends non-empty fields to avoid accidentally overwriting unchanged data.
  */
 export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
-  const { user } = useAuthStore()
+  const { user } = useAuthStore();
   const { mutate: updateProfile, isPending } = useUpdateProfile({
     onSuccess: () => onOpenChange(false),
-  })
+  });
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      email: '',
-      username: '',
-      password: '',
-      confirmPassword: '',
+      email: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
     },
-  })
+  });
 
   // Pre-fill current user data when dialog opens
   useEffect(() => {
@@ -93,33 +89,33 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
       form.reset({
         email: user.email,
         username: user.username,
-        password: '',
-        confirmPassword: '',
-      })
+        password: "",
+        confirmPassword: "",
+      });
     }
-  }, [open, user, form])
+  }, [open, user, form]);
 
   function onSubmit(values: ProfileFormValues) {
     // Only send fields that have changed and are non-empty
-    const payload: Record<string, string> = {}
+    const payload: Record<string, string> = {};
 
     if (values.email && values.email !== user?.email) {
-      payload.email = values.email
+      payload.email = values.email;
     }
     if (values.username && values.username !== user?.username) {
-      payload.username = values.username
+      payload.username = values.username;
     }
     if (values.password) {
-      payload.password = values.password
+      payload.password = values.password;
     }
 
     // Nothing changed
     if (Object.keys(payload).length === 0) {
-      onOpenChange(false)
-      return
+      onOpenChange(false);
+      return;
     }
 
-    updateProfile(payload)
+    updateProfile(payload);
   }
 
   return (
@@ -127,9 +123,6 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
       <DialogContent className="sm:max-w-md" id="profile-dialog">
         <DialogHeader>
           <DialogTitle>Cập nhật hồ sơ</DialogTitle>
-          <DialogDescription>
-            Chỉnh sửa thông tin cá nhân của bạn. Để trống các trường không muốn thay đổi.
-          </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -175,7 +168,6 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>3–50 ký tự</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -192,12 +184,11 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
                     <Input
                       id="profile-password"
                       type="password"
-                      placeholder="Để trống nếu không đổi"
+                      placeholder="Để trống nếu không đổi (Tối thiểu 6 ký tự)"
                       disabled={isPending}
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>Tối thiểu 6 ký tự</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -235,18 +226,14 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
               >
                 Hủy
               </Button>
-              <Button
-                id="profile-save"
-                type="submit"
-                disabled={isPending}
-              >
+              <Button id="profile-save" type="submit" disabled={isPending}>
                 {isPending ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
                     Đang lưu...
                   </>
                 ) : (
-                  'Lưu thay đổi'
+                  "Lưu thay đổi"
                 )}
               </Button>
             </div>
@@ -254,5 +241,5 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
         </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

@@ -141,7 +141,10 @@ export function DashboardPage() {
         selectedWarehouseId === "all" &&
         financialData?.byWarehouse &&
         financialData.byWarehouse.length > 0 && (
-          <WarehouseBreakdownTable data={financialData.byWarehouse} />
+          <WarehouseBreakdownTable 
+            data={financialData.byWarehouse} 
+            warehouses={warehousesData?.data}
+          />
         )}
 
       {/* Package status report — all roles */}

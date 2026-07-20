@@ -10,8 +10,11 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
+import type { WarehouseItem } from '@/features/warehouses/api/warehouseApi';
+
 interface WarehouseBreakdownTableProps {
   data: WarehouseBreakdown[];
+  warehouses?: WarehouseItem[];
 }
 
 /**
@@ -21,6 +24,7 @@ interface WarehouseBreakdownTableProps {
  */
 export function WarehouseBreakdownTable({
   data,
+  warehouses,
 }: WarehouseBreakdownTableProps) {
   if (!data || data.length === 0) return null;
 
@@ -43,7 +47,7 @@ export function WarehouseBreakdownTable({
             <thead>
               <tr className="border-b border-border bg-muted/30">
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">
-                  Mã kho
+                  Kho hàng
                 </th>
                 <th className="text-right px-4 py-3 font-medium text-muted-foreground">
                   Kiện hàng
@@ -61,8 +65,8 @@ export function WarehouseBreakdownTable({
                     idx % 2 === 0 ? "" : "bg-muted/10"
                   }`}
                 >
-                  <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
-                    {row.warehouseId.slice(0, 8)}…
+                  <td className="px-4 py-3 font-medium text-foreground">
+                    {warehouses?.find(w => w.id === row.warehouseId)?.name || `${row.warehouseId.slice(0, 8)}…`}
                   </td>
                   <td className="px-4 py-3 text-right font-semibold">
                     {row.totalPackages.toLocaleString("vi-VN")}

@@ -25,6 +25,9 @@ class UserService {
       username: user.username,
       role: mapPrismaRole(user.role),
       warehouseId: user.warehouseId,
+      isBanned: user.isBanned,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
     };
   }
 

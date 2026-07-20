@@ -6,9 +6,10 @@ import { getWarehouses } from '../api/warehouseApi'
  * Uses limit=100 to get all in one request (Admin filter use case).
  * Only called when user is ADMIN (guarded at component level).
  */
-export function useWarehouses() {
+export function useWarehouses(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: ['warehouses', 'list-all'],
     queryFn: () => getWarehouses({ limit: 100 }),
+    enabled: options?.enabled,
   })
 }

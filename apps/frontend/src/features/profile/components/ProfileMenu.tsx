@@ -11,21 +11,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuthStore } from "@/store/authStore";
 import { useLogout } from "@/features/auth/hooks/useLogout";
-import { Role } from "@/types/common";
 import { ProfileDialog } from "./ProfileDialog";
-
-// ─── Role display helpers ─────────────────────────────────────────────────────
-const roleLabel: Record<Role, string> = {
-  [Role.ADMIN]: "Admin",
-  [Role.MANAGER]: "Manager",
-  [Role.STAFF]: "Staff",
-};
-
-const roleBadgeClass: Record<Role, string> = {
-  [Role.ADMIN]: "text-violet-400",
-  [Role.MANAGER]: "text-blue-400",
-  [Role.STAFF]: "text-emerald-400",
-};
 
 /** Get initials for avatar fallback (e.g. "John Doe" → "JD") */
 function getInitials(username: string): string {

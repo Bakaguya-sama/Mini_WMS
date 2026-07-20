@@ -1,49 +1,48 @@
-import { Badge } from '@/components/ui/badge'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import type { PackageStatusCount } from '../types'
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { PackageStatusCount } from "../types";
 
 // ─── Status display config — per CONTEXT §11 color rules ─────────────────────
 const STATUS_CONFIG: Record<
-  PackageStatusCount['status'],
+  PackageStatusCount["status"],
   { label: string; badgeClass: string; rowClass: string }
 > = {
   DELIVERED: {
-    label: 'Đã giao',
-    badgeClass: 'bg-emerald-500/20 text-emerald-600 border-emerald-500/30 hover:bg-emerald-500/20',
-    rowClass: 'border-l-emerald-500',
+    label: "Đã giao",
+    badgeClass:
+      "bg-emerald-500/20 text-emerald-600 border-emerald-500/30 hover:bg-emerald-500/20",
+    rowClass: "border-l-emerald-500",
   },
   IN_TRANSIT: {
-    label: 'Đang vận chuyển',
-    badgeClass: 'bg-amber-500/20 text-amber-600 border-amber-500/30 hover:bg-amber-500/20',
-    rowClass: 'border-l-amber-500',
+    label: "Đang vận chuyển",
+    badgeClass:
+      "bg-amber-500/20 text-amber-600 border-amber-500/30 hover:bg-amber-500/20",
+    rowClass: "border-l-amber-500",
   },
   PENDING: {
-    label: 'Chờ xử lý',
-    badgeClass: 'bg-blue-500/20 text-blue-600 border-blue-500/30 hover:bg-blue-500/20',
-    rowClass: 'border-l-blue-500',
+    label: "Chờ xử lý",
+    badgeClass:
+      "bg-blue-500/20 text-blue-600 border-blue-500/30 hover:bg-blue-500/20",
+    rowClass: "border-l-blue-500",
   },
   CANCELLED: {
-    label: 'Đã hủy',
-    badgeClass: 'bg-red-500/20 text-red-600 border-red-500/30 hover:bg-red-500/20',
-    rowClass: 'border-l-red-500',
+    label: "Đã hủy",
+    badgeClass:
+      "bg-red-500/20 text-red-600 border-red-500/30 hover:bg-red-500/20",
+    rowClass: "border-l-red-500",
   },
-}
+};
 
 // Canonical display order
-const STATUS_ORDER: PackageStatusCount['status'][] = [
-  'DELIVERED',
-  'IN_TRANSIT',
-  'PENDING',
-  'CANCELLED',
-]
+const STATUS_ORDER: PackageStatusCount["status"][] = [
+  "DELIVERED",
+  "IN_TRANSIT",
+  "PENDING",
+  "CANCELLED",
+];
 
 interface PackageStatusReportProps {
-  data: PackageStatusCount[]
+  data: PackageStatusCount[];
 }
 
 /**
@@ -52,8 +51,8 @@ interface PackageStatusReportProps {
  */
 export function PackageStatusReport({ data }: PackageStatusReportProps) {
   // Build a map for O(1) lookup
-  const countMap = Object.fromEntries(data.map((d) => [d.status, d.count]))
-  const total = data.reduce((sum, d) => sum + d.count, 0)
+  const countMap = Object.fromEntries(data.map((d) => [d.status, d.count]));
+  const total = data.reduce((sum, d) => sum + d.count, 0);
 
   return (
     <Card>
@@ -64,9 +63,9 @@ export function PackageStatusReport({ data }: PackageStatusReportProps) {
       </CardHeader>
       <CardContent className="space-y-3">
         {STATUS_ORDER.map((status) => {
-          const cfg = STATUS_CONFIG[status]
-          const count = countMap[status] ?? 0
-          const pct = total > 0 ? Math.round((count / total) * 100) : 0
+          const cfg = STATUS_CONFIG[status];
+          const count = countMap[status] ?? 0;
+          const pct = total > 0 ? Math.round((count / total) * 100) : 0;
 
           return (
             <div
@@ -86,22 +85,22 @@ export function PackageStatusReport({ data }: PackageStatusReportProps) {
                   {pct}%
                 </span>
                 <span className="text-xl font-bold text-foreground min-w-[2.5rem] text-right">
-                  {count.toLocaleString('vi-VN')}
+                  {count.toLocaleString("vi-VN")}
                 </span>
               </div>
             </div>
-          )
+          );
         })}
 
         {total > 0 && (
           <div className="flex justify-between items-center pt-2 border-t border-border text-sm">
             <span className="text-muted-foreground font-medium">Tổng cộng</span>
-            <span className="font-bold text-foreground">
-              {total.toLocaleString('vi-VN')}
+            <span className="font-bold text-3xl">
+              {total.toLocaleString("vi-VN")}
             </span>
           </div>
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

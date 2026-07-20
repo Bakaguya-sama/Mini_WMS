@@ -1,27 +1,21 @@
-import { useState } from 'react'
+import { useState } from "react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { useAuthStore } from '@/store/authStore'
-import { Role } from '@/types/common'
-import { useFinancialReport } from '@/features/dashboard/hooks/useFinancialReport'
-import { usePackageStatusReport } from '@/features/dashboard/hooks/usePackageStatusReport'
-import { useWarehouses } from '@/features/warehouses/hooks/useWarehouses'
-import { FinancialReportCard } from '@/features/dashboard/components/FinancialReportCard'
-import { PackageStatusReport } from '@/features/dashboard/components/PackageStatusReport'
-import { WarehouseBreakdownTable } from '@/features/dashboard/components/WarehouseBreakdownTable'
-import { DashboardSkeleton } from '@/features/dashboard/components/DashboardSkeleton'
-import { AlertCircle } from 'lucide-react'
-
-const ROLE_LABEL: Record<Role, string> = {
-  [Role.ADMIN]: 'Admin',
-  [Role.MANAGER]: 'Manager',
-  [Role.STAFF]: 'Staff',
-}
+} from "@/components/ui/select";
+import { useAuthStore } from "@/store/authStore";
+import { Role } from "@/types/common";
+import { useFinancialReport } from "@/features/dashboard/hooks/useFinancialReport";
+import { usePackageStatusReport } from "@/features/dashboard/hooks/usePackageStatusReport";
+import { useWarehouses } from "@/features/warehouses/hooks/useWarehouses";
+import { FinancialReportCard } from "@/features/dashboard/components/FinancialReportCard";
+import { PackageStatusReport } from "@/features/dashboard/components/PackageStatusReport";
+import { WarehouseBreakdownTable } from "@/features/dashboard/components/WarehouseBreakdownTable";
+import { DashboardSkeleton } from "@/features/dashboard/components/DashboardSkeleton";
+import { AlertCircle } from "lucide-react";
 
 /**
  * Dashboard page — full implementation (Phase 3).
@@ -33,42 +27,43 @@ const ROLE_LABEL: Record<Role, string> = {
  *
  * Data freshness: refetchInterval=10s inherited from global queryClient (per CONTEXT §7).
  */
+
 export function DashboardPage() {
-  const { user } = useAuthStore()
-  const isAdmin = user?.role === Role.ADMIN
-  const isStaff = user?.role === Role.STAFF
+  const { user } = useAuthStore();
+  const isAdmin = user?.role === Role.ADMIN;
+  const isStaff = user?.role === Role.STAFF;
 
   // Admin-only: warehouse filter state
   // 'all' = no warehouseId param (system-wide, returns byWarehouse[])
-  const [selectedWarehouseId, setSelectedWarehouseId] = useState<string>('all')
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState<string>("all");
 
   // Warehouses list for Admin filter dropdown
-  const { data: warehousesData } = useWarehouses()
+  const { data: warehousesData } = useWarehouses();
 
   // Financial report — Admin passes warehouseId filter if not 'all'
   const financialParams =
-    isAdmin && selectedWarehouseId !== 'all'
+    isAdmin && selectedWarehouseId !== "all"
       ? { warehouseId: selectedWarehouseId }
-      : undefined
+      : undefined;
 
   const {
     data: financialData,
     isLoading: isFinancialLoading,
     isError: isFinancialError,
-  } = useFinancialReport(isStaff ? undefined : financialParams)
+  } = useFinancialReport(isStaff ? undefined : financialParams);
 
   // Package status report — all roles
   const {
     data: statusData,
     isLoading: isStatusLoading,
     isError: isStatusError,
-  } = usePackageStatusReport()
+  } = usePackageStatusReport();
 
-  const isLoading = isFinancialLoading || isStatusLoading
-  const isError = isFinancialError || isStatusError
+  const isLoading = isFinancialLoading || isStatusLoading;
+  const isError = isFinancialError || isStatusError;
 
   if (isLoading) {
-    return <DashboardSkeleton />
+    return <DashboardSkeleton />;
   }
 
   return (
@@ -80,11 +75,9 @@ export function DashboardPage() {
             Dashboard
           </h1>
           <p className="text-sm text-muted-foreground mt-0.5">
-            Xin chào,{' '}
-            <span className="font-medium text-foreground">{user?.username}</span>
-            {' · '}
-            <span className="text-muted-foreground">
-              {ROLE_LABEL[user?.role ?? Role.STAFF]}
+            Xin chào,{" "}
+            <span className="font-medium text-foreground">
+              {user?.username}
             </span>
           </p>
         </div>
@@ -145,7 +138,7 @@ export function DashboardPage() {
 
       {/* Admin system-wide: warehouse breakdown table */}
       {isAdmin &&
-        selectedWarehouseId === 'all' &&
+        selectedWarehouseId === "all" &&
         financialData?.byWarehouse &&
         financialData.byWarehouse.length > 0 && (
           <WarehouseBreakdownTable data={financialData.byWarehouse} />
@@ -154,5 +147,5 @@ export function DashboardPage() {
       {/* Package status report — all roles */}
       {statusData && <PackageStatusReport data={statusData} />}
     </div>
-  )
+  );
 }

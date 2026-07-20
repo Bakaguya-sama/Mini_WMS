@@ -1,22 +1,17 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import type { WarehouseBreakdown } from '../types'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { WarehouseBreakdown } from "../types";
 
 /** Format currency for table cells */
 function formatCurrency(value: number): string {
-  return new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
     maximumFractionDigits: 0,
-  }).format(value)
+  }).format(value);
 }
 
 interface WarehouseBreakdownTableProps {
-  data: WarehouseBreakdown[]
+  data: WarehouseBreakdown[];
 }
 
 /**
@@ -27,10 +22,13 @@ interface WarehouseBreakdownTableProps {
 export function WarehouseBreakdownTable({
   data,
 }: WarehouseBreakdownTableProps) {
-  if (!data || data.length === 0) return null
+  if (!data || data.length === 0) return null;
 
-  const totalRevenue = data.reduce((sum, row) => sum + row.totalRevenue, 0)
-  const totalPackages = data.reduce((sum, row) => sum + row.totalPackages, 0)
+  const totalRevenue = data.reduce(
+    (sum, row) => sum + Number(row.totalRevenue),
+    0,
+  );
+  const totalPackages = data.reduce((sum, row) => sum + row.totalPackages, 0);
 
   return (
     <Card>
@@ -60,14 +58,14 @@ export function WarehouseBreakdownTable({
                 <tr
                   key={row.warehouseId}
                   className={`border-b border-border/50 hover:bg-muted/20 transition-colors ${
-                    idx % 2 === 0 ? '' : 'bg-muted/10'
+                    idx % 2 === 0 ? "" : "bg-muted/10"
                   }`}
                 >
                   <td className="px-4 py-3 font-mono text-xs text-muted-foreground">
                     {row.warehouseId.slice(0, 8)}…
                   </td>
                   <td className="px-4 py-3 text-right font-semibold">
-                    {row.totalPackages.toLocaleString('vi-VN')}
+                    {row.totalPackages.toLocaleString("vi-VN")}
                   </td>
                   <td className="px-4 py-3 text-right font-semibold text-emerald-600">
                     {formatCurrency(row.totalRevenue)}
@@ -79,7 +77,7 @@ export function WarehouseBreakdownTable({
               <tr className="border-t-2 border-border bg-muted/20 font-bold">
                 <td className="px-4 py-3 text-muted-foreground">Tổng cộng</td>
                 <td className="px-4 py-3 text-right">
-                  {totalPackages.toLocaleString('vi-VN')}
+                  {totalPackages.toLocaleString("vi-VN")}
                 </td>
                 <td className="px-4 py-3 text-right text-emerald-600">
                   {formatCurrency(totalRevenue)}
@@ -90,5 +88,5 @@ export function WarehouseBreakdownTable({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

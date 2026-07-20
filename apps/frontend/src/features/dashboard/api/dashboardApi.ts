@@ -28,11 +28,14 @@ export async function getFinancialReport(
 /**
  * GET /dashboard/package-status-report
  * Returns array of { status, count } for all package statuses.
- * Accessible by all roles (Admin/Manager/Staff).
+ * Admin can filter by warehouseId; Manager/Staff scoped automatically by BE.
  */
-export async function getPackageStatusReport(): Promise<PackageStatusCount[]> {
+export async function getPackageStatusReport(params?: {
+  warehouseId?: string
+}): Promise<PackageStatusCount[]> {
   const response = await axiosClient.get<ApiResponse<PackageStatusCount[]>>(
-    ENDPOINTS.DASHBOARD.PACKAGE_STATUS_REPORT
+    ENDPOINTS.DASHBOARD.PACKAGE_STATUS_REPORT,
+    { params }
   )
   return response.data.data
 }

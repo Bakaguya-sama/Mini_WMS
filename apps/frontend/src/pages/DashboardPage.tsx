@@ -40,8 +40,8 @@ export function DashboardPage() {
   // Warehouses list for Admin filter dropdown
   const { data: warehousesData } = useWarehouses();
 
-  // Financial report — Admin passes warehouseId filter if not 'all'
-  const financialParams =
+  // Shared filter params — Admin can filter by warehouse, others have no filter
+  const filterParams =
     isAdmin && selectedWarehouseId !== "all"
       ? { warehouseId: selectedWarehouseId }
       : undefined;
@@ -50,14 +50,14 @@ export function DashboardPage() {
     data: financialData,
     isLoading: isFinancialLoading,
     isError: isFinancialError,
-  } = useFinancialReport(isStaff ? undefined : financialParams);
+  } = useFinancialReport(isStaff ? undefined : filterParams);
 
-  // Package status report — all roles
+  // Package status report — same warehouseId filter as financial report (Admin only)
   const {
     data: statusData,
     isLoading: isStatusLoading,
     isError: isStatusError,
-  } = usePackageStatusReport();
+  } = usePackageStatusReport(isStaff ? undefined : filterParams);
 
   const isLoading = isFinancialLoading || isStatusLoading;
   const isError = isFinancialError || isStatusError;

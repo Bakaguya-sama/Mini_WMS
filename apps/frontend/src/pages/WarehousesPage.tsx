@@ -1,14 +1,13 @@
-import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { useAuthStore } from '@/store/authStore'
-import { Role } from '@/types/common'
-import { useWarehouseList } from '@/features/warehouses/hooks/useWarehouseList'
-import { getWarehouseById } from '@/features/warehouses/api/warehouseApi'
-import { WarehouseTable } from '@/features/warehouses/components/WarehouseTable'
-import { Building2 } from 'lucide-react'
-import type { WarehouseResponse } from '@/features/warehouses/types'
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useAuthStore } from "@/store/authStore";
+import { Role } from "@/types/common";
+import { useWarehouseList } from "@/features/warehouses/hooks/useWarehouseList";
+import { getWarehouseById } from "@/features/warehouses/api/warehouseApi";
+import { WarehouseTable } from "@/features/warehouses/components/WarehouseTable";
+import type { WarehouseResponse } from "@/features/warehouses/types";
 
-const LIMIT = 10
+const LIMIT = 10;
 
 /**
  * Trang Quản lý Kho hàng (/warehouses) — Phase 4.
@@ -19,12 +18,12 @@ const LIMIT = 10
  * - Staff: không có quyền (route guard chặn, trang này không render)
  */
 export function WarehousesPage() {
-  const { user } = useAuthStore()
-  const isAdmin = user?.role === Role.ADMIN
-  const isManager = user?.role === Role.MANAGER
+  const { user } = useAuthStore();
+  const isAdmin = user?.role === Role.ADMIN;
+  const isManager = user?.role === Role.MANAGER;
 
-  const [page, setPage] = useState(1)
-  const [search, setSearch] = useState('')
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
 
   return (
     <div className="space-y-6">
@@ -39,8 +38,8 @@ export function WarehousesPage() {
           </h1>
           <p className="text-sm text-muted-foreground">
             {isAdmin
-              ? 'Quản lý toàn bộ kho hàng trong hệ thống'
-              : 'Thông tin kho hàng của bạn'}
+              ? "Quản lý toàn bộ kho hàng trong hệ thống"
+              : "Thông tin kho hàng của bạn"}
           </p>
         </div>
       </div>
@@ -50,29 +49,35 @@ export function WarehousesPage() {
           page={page}
           search={search}
           onPageChange={setPage}
-          onSearchChange={(s) => { setSearch(s); setPage(1) }}
+          onSearchChange={(s) => {
+            setSearch(s);
+            setPage(1);
+          }}
         />
       )}
 
       {isManager && <ManagerWarehouseView warehouseId={user?.warehouseId} />}
     </div>
-  )
+  );
 }
 
 // ─── Admin subview ────────────────────────────────────────────────────────────
 
 function AdminWarehouseView({
-  page, search, onPageChange, onSearchChange,
+  page,
+  search,
+  onPageChange,
+  onSearchChange,
 }: {
-  page: number
-  search: string
-  onPageChange: (p: number) => void
-  onSearchChange: (s: string) => void
+  page: number;
+  search: string;
+  onPageChange: (p: number) => void;
+  onSearchChange: (s: string) => void;
 }) {
   const { data, isLoading } = useWarehouseList(
     { page, limit: LIMIT, search: search || undefined },
-    { enabled: true }
-  )
+    { enabled: true },
+  );
 
   return (
     <WarehouseTable
@@ -86,21 +91,25 @@ function AdminWarehouseView({
       onPageChange={onPageChange}
       onSearchChange={onSearchChange}
     />
-  )
+  );
 }
 
 // ─── Manager subview — single warehouse via GET /warehouses/:id ───────────────
 
-function ManagerWarehouseView({ warehouseId }: { warehouseId: string | null | undefined }) {
+function ManagerWarehouseView({
+  warehouseId,
+}: {
+  warehouseId: string | null | undefined;
+}) {
   const { data, isLoading } = useQuery<WarehouseResponse>({
-    queryKey: ['warehouses', 'by-id', warehouseId],
+    queryKey: ["warehouses", "by-id", warehouseId],
     queryFn: () => getWarehouseById(warehouseId!),
     enabled: !!warehouseId,
     refetchInterval: 10000,
     refetchOnWindowFocus: true,
-  })
+  });
 
-  const warehouseList: WarehouseResponse[] = data ? [data] : []
+  const warehouseList: WarehouseResponse[] = data ? [data] : [];
 
   return (
     <WarehouseTable
@@ -111,8 +120,8 @@ function ManagerWarehouseView({ warehouseId }: { warehouseId: string | null | un
       page={1}
       total={warehouseList.length}
       limit={10}
-      onPageChange={() => { }}
-      onSearchChange={() => { }}
+      onPageChange={() => {}}
+      onSearchChange={() => {}}
     />
-  )
+  );
 }

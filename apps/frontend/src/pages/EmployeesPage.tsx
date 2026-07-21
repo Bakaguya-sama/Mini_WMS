@@ -1,12 +1,11 @@
-import { useState } from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useAuthStore } from '@/store/authStore'
-import { Role } from '@/types/common'
-import { useUsers } from '@/features/employees/hooks/useUsers'
-import { EmployeeTable } from '@/features/employees/components/EmployeeTable'
-import { Users } from 'lucide-react'
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuthStore } from "@/store/authStore";
+import { Role } from "@/types/common";
+import { useUsers } from "@/features/employees/hooks/useUsers";
+import { EmployeeTable } from "@/features/employees/components/EmployeeTable";
 
-const LIMIT = 10
+const LIMIT = 10;
 
 /**
  * Trang Quản lý Nhân viên (/employees) — Phase 4.
@@ -19,9 +18,9 @@ const LIMIT = 10
  * sortBy options per api-docs: username | email | createdAt | updatedAt
  */
 export function EmployeesPage() {
-  const { user } = useAuthStore()
-  const isAdmin = user?.role === Role.ADMIN
-  const isManager = user?.role === Role.MANAGER
+  const { user } = useAuthStore();
+  const isAdmin = user?.role === Role.ADMIN;
+  const isManager = user?.role === Role.MANAGER;
 
   return (
     <div className="space-y-6">
@@ -36,8 +35,8 @@ export function EmployeesPage() {
           </h1>
           <p className="text-sm text-muted-foreground">
             {isAdmin
-              ? 'Quản lý toàn bộ Manager và Staff trong hệ thống'
-              : 'Quản lý nhân viên thuộc kho của bạn'}
+              ? "Quản lý toàn bộ Manager và Staff trong hệ thống"
+              : "Quản lý nhân viên thuộc kho của bạn"}
           </p>
         </div>
       </div>
@@ -46,38 +45,36 @@ export function EmployeesPage() {
       {isAdmin && <AdminEmployeesView currentUserId={user!.id} />}
 
       {/* Manager: only Staff in their warehouse */}
-      {isManager && (
-        <ManagerEmployeesView currentUserId={user!.id} />
-      )}
+      {isManager && <ManagerEmployeesView currentUserId={user!.id} />}
     </div>
-  )
+  );
 }
 
 // ─── Admin tabbed view ────────────────────────────────────────────────────────
 
 function AdminEmployeesView({ currentUserId }: { currentUserId: string }) {
-  const [managerPage, setManagerPage] = useState(1)
-  const [managerSearch, setManagerSearch] = useState('')
-  const [staffPage, setStaffPage] = useState(1)
-  const [staffSearch, setStaffSearch] = useState('')
+  const [managerPage, setManagerPage] = useState(1);
+  const [managerSearch, setManagerSearch] = useState("");
+  const [staffPage, setStaffPage] = useState(1);
+  const [staffSearch, setStaffSearch] = useState("");
 
   const { data: managerData, isLoading: isManagerLoading } = useUsers({
     role: Role.MANAGER,
     page: managerPage,
     limit: LIMIT,
     search: managerSearch || undefined,
-    sortBy: 'createdAt',
-    sortOrder: 'desc',
-  })
+    sortBy: "createdAt",
+    sortOrder: "desc",
+  });
 
   const { data: staffData, isLoading: isStaffLoading } = useUsers({
     role: Role.STAFF,
     page: staffPage,
     limit: LIMIT,
     search: staffSearch || undefined,
-    sortBy: 'createdAt',
-    sortOrder: 'desc',
-  })
+    sortBy: "createdAt",
+    sortOrder: "desc",
+  });
 
   return (
     <Tabs defaultValue="manager">
@@ -110,7 +107,10 @@ function AdminEmployeesView({ currentUserId }: { currentUserId: string }) {
           total={managerData?.total ?? 0}
           limit={LIMIT}
           onPageChange={setManagerPage}
-          onSearchChange={(s) => { setManagerSearch(s); setManagerPage(1) }}
+          onSearchChange={(s) => {
+            setManagerSearch(s);
+            setManagerPage(1);
+          }}
         />
       </TabsContent>
 
@@ -124,18 +124,21 @@ function AdminEmployeesView({ currentUserId }: { currentUserId: string }) {
           total={staffData?.total ?? 0}
           limit={LIMIT}
           onPageChange={setStaffPage}
-          onSearchChange={(s) => { setStaffSearch(s); setStaffPage(1) }}
+          onSearchChange={(s) => {
+            setStaffSearch(s);
+            setStaffPage(1);
+          }}
         />
       </TabsContent>
     </Tabs>
-  )
+  );
 }
 
 // ─── Manager view — Staff only in their warehouse ─────────────────────────────
 
 function ManagerEmployeesView({ currentUserId }: { currentUserId: string }) {
-  const [page, setPage] = useState(1)
-  const [search, setSearch] = useState('')
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
 
   // BE automatically scopes to Manager's warehouse — no warehouseId needed
   const { data, isLoading } = useUsers({
@@ -143,9 +146,9 @@ function ManagerEmployeesView({ currentUserId }: { currentUserId: string }) {
     page,
     limit: LIMIT,
     search: search || undefined,
-    sortBy: 'createdAt',
-    sortOrder: 'desc',
-  })
+    sortBy: "createdAt",
+    sortOrder: "desc",
+  });
 
   return (
     <EmployeeTable
@@ -157,7 +160,10 @@ function ManagerEmployeesView({ currentUserId }: { currentUserId: string }) {
       total={data?.total ?? 0}
       limit={LIMIT}
       onPageChange={setPage}
-      onSearchChange={(s) => { setSearch(s); setPage(1) }}
+      onSearchChange={(s) => {
+        setSearch(s);
+        setPage(1);
+      }}
     />
-  )
+  );
 }

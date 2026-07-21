@@ -41,6 +41,15 @@ router.use(authenticate);
  *           type: string
  *           format: uuid
  *           nullable: true
+ *         isBanned:
+ *           type: boolean
+ *           example: false
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
  *
  *     UserListResponse:
  *       type: object

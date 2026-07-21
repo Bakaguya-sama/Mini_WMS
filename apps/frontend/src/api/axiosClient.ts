@@ -80,6 +80,12 @@ axiosClient.interceptors.response.use(
 
     // ── Handle 401: Try token refresh ─────────────────────────────────────────
     if (statusCode === 401) {
+      // If 401 on login, it's just wrong credentials, don't trigger refresh logic
+      if (originalRequest.url === ENDPOINTS.AUTH.LOGIN) {
+        toast.error(message)
+        return Promise.reject(error)
+      }
+
       // Case 1: The refresh request itself failed → full logout
       if (originalRequest.url === ENDPOINTS.AUTH.REFRESH) {
         useAuthStore.getState().clearAuth();

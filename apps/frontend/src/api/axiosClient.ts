@@ -11,8 +11,7 @@ declare module "axios" {
 }
 
 // ─── Base URL (from api-docs.json servers[0].url) ─────────────────────────────
-const BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000/api/v1";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000/api/v1";
 
 // ─── Race condition guard ─────────────────────────────────────────────────────
 // If multiple requests get 401 simultaneously, only ONE refresh call is made.

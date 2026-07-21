@@ -5,7 +5,7 @@ function getRelativePath(fromFile, toAlias) {
   // fromFile: e.g. D:\...\src\modules\auth\auth.controller.ts
   // toAlias: e.g. @/shared/errors/AppError
   
-  const srcDir = path.join(__dirname, 'apps/backend/src');
+  const srcDir = path.join(__dirname, 'src');
   const fromDir = path.dirname(fromFile);
   
   // Convert @/ to absolute path in src
@@ -61,5 +61,5 @@ function processDirectory(dir) {
   }
 }
 
-processDirectory(path.join(__dirname, 'apps/backend/src'));
+processDirectory(path.join(__dirname, 'src'));
 console.log("Done replacing aliases!");

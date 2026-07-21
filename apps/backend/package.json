@@ -4,7 +4,6 @@
   "private": true,
   "license": "ISC",
   "scripts": {
-    "postinstall": "prisma generate",
     "dev": "tsx watch src/server.ts",
     "build": "prisma generate && tsc && tsc-alias",
     "start": "node dist/server.js",

@@ -8,7 +8,7 @@
     "dev": "tsx watch src/server.ts",
     "build": "prisma generate && tsc && tsc-alias",
     "start": "node dist/server.js",
-    "vercel-build": "node replace_aliases.js && prisma generate",
+    "vercel-build": "cd ../../packages/shared-types && npm run build && cd ../../apps/backend && node replace_aliases.js && prisma generate",
     "db:seed": "tsx prisma/seed.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy"

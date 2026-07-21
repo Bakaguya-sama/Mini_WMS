@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { WarehouseBreakdown } from "../types";
+import type { WarehouseResponse } from '@/features/warehouses/types';
 
 /** Format currency for table cells */
 function formatCurrency(value: number): string {
@@ -10,11 +11,11 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
-import type { WarehouseItem } from '@/features/warehouses/api/warehouseApi';
+
 
 interface WarehouseBreakdownTableProps {
   data: WarehouseBreakdown[];
-  warehouses?: WarehouseItem[];
+  warehouses?: WarehouseResponse[];
 }
 
 /**

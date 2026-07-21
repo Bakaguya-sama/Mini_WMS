@@ -152,7 +152,7 @@ function CreateForm({
         <FormField control={form.control} name="username" render={({ field }) => (
           <FormItem>
             <FormLabel>Tên đăng nhập <span className="text-destructive">*</span></FormLabel>
-            <FormControl><Input id="emp-create-username" placeholder="john_doe" disabled={isPending} {...field} /></FormControl>
+            <FormControl><Input id="emp-create-username" placeholder="john_doe (viết liền không cách)" disabled={isPending} {...field} /></FormControl>
             <FormMessage />
           </FormItem>
         )} />

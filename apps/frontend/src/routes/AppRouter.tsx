@@ -5,6 +5,7 @@ import { ProfileMenu } from '@/features/profile/components/ProfileMenu'
 import { LoginPage } from '@/pages/LoginPage'
 import { DashboardPage } from '@/pages/DashboardPage'
 import { WarehousesPage } from '@/pages/WarehousesPage'
+import { EmployeesPage } from '@/pages/EmployeesPage'
 
 // Placeholder pages for future phases — prevents broken links in Sidebar
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
@@ -49,7 +50,7 @@ export const router = createBrowserRouter([
           },
           {
             path: '/employees',
-            element: <PlaceholderPage title="Quản lý Nhân viên" phase="Phase 4" />,
+            element: <EmployeesPage />,
           },
         ],
       },

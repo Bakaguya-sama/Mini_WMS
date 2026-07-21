@@ -1,6 +1,6 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
     "target": "ES2023",
     "module": "CommonJS",
     "moduleResolution": "Node",

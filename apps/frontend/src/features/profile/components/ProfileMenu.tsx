@@ -78,7 +78,10 @@ export function ProfileMenu() {
           {/* Cập nhật hồ sơ */}
           <DropdownMenuItem
             id="profile-edit-item"
-            onSelect={() => setProfileOpen(true)}
+            onSelect={() => {
+              // Delay opening the dialog so the dropdown has time to close and restore focus
+              setTimeout(() => setProfileOpen(true), 100);
+            }}
             className="cursor-pointer"
           >
             <Settings className="w-4 h-4 mr-2" />

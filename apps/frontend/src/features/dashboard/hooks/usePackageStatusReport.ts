@@ -12,9 +12,10 @@ interface PackageStatusReportParams {
  * Admin can pass warehouseId to filter; Manager/Staff scoped automatically by BE.
  * Refetch interval: inherited from global queryClient config (10s per CONTEXT §7).
  */
-export function usePackageStatusReport(params?: PackageStatusReportParams) {
+export function usePackageStatusReport(params?: PackageStatusReportParams, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: ['dashboard', 'package-status-report', params?.warehouseId ?? 'all'],
     queryFn: () => getPackageStatusReport(params),
+    enabled: options?.enabled,
   })
 }

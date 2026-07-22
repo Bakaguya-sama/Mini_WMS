@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   MoreHorizontal,
   Pencil,
@@ -96,6 +96,15 @@ export function EmployeeTable({
   const unbanMutation = useUnbanUser()
   const deleteMutation = useDeleteUser()
 
+  // Auto-search debounce
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onSearchChange(searchValue)
+      onPageChange(1)
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [searchValue])
+
   const totalPages = Math.ceil(total / limit)
 
   function handleEdit(user: UserResponse) {
@@ -134,19 +143,19 @@ export function EmployeeTable({
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
           <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               id="employee-search"
-              className="pl-8 w-[240px]"
+              className="pl-8 w-[280px] h-10"
               placeholder="Tìm theo tên / email..."
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
             />
           </div>
-          <Button type="submit" variant="outline" size="sm">Tìm</Button>
+          <Button type="submit" variant="outline" className="h-10 px-6">Tìm</Button>
         </form>
 
-        <Button id="btn-add-employee" onClick={handleAddNew} size="sm">
+        <Button id="btn-add-employee" onClick={handleAddNew} className="h-10 px-4">
           <Plus className="mr-1.5 h-4 w-4" />
           Thêm nhân viên
         </Button>

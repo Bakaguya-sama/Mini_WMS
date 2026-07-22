@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Pencil, Trash2, MoreHorizontal, Plus, Search } from 'lucide-react'
 import {
   Table,
@@ -63,6 +63,15 @@ export function WarehouseTable({
   const [searchValue, setSearchValue] = useState('')
   const deleteMutation = useDeleteWarehouse()
 
+  // Auto-search debounce
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onSearchChange(searchValue)
+      onPageChange(1)
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [searchValue])
+
   const totalPages = Math.ceil(total / limit)
 
   function handleEdit(wh: WarehouseResponse) {
@@ -93,20 +102,20 @@ export function WarehouseTable({
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
           <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               id="warehouse-search"
-              className="pl-8 w-[240px]"
+              className="pl-8 w-[280px] h-10"
               placeholder="Tìm theo tên kho..."
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
             />
           </div>
-          <Button type="submit" variant="outline" size="sm">Tìm</Button>
+          <Button type="submit" variant="outline" className="h-10 px-6">Tìm</Button>
         </form>
 
         {isAdmin && (
-          <Button id="btn-add-warehouse" onClick={handleAddNew} size="sm">
+          <Button id="btn-add-warehouse" onClick={handleAddNew} className="h-10 px-4">
             <Plus className="mr-1.5 h-4 w-4" />
             Thêm kho mới
           </Button>

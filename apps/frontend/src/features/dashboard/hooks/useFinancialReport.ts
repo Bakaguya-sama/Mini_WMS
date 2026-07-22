@@ -12,9 +12,10 @@ import type { FinancialReportParams } from '../types'
  *
  * Refetch interval: inherited from global queryClient config (10s per CONTEXT §7).
  */
-export function useFinancialReport(params?: FinancialReportParams) {
+export function useFinancialReport(params?: FinancialReportParams, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: ['dashboard', 'financial-report', params?.warehouseId ?? 'all'],
     queryFn: () => getFinancialReport(params),
+    enabled: options?.enabled,
   })
 }

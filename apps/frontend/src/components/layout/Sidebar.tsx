@@ -19,6 +19,7 @@ const NAV_ITEMS: NavItem[] = [
     label: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
+    allowedRoles: [Role.ADMIN, Role.MANAGER],
   },
   {
     label: "Kiện hàng",

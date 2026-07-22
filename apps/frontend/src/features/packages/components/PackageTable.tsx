@@ -30,7 +30,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { PackageDialog } from './PackageDialog'
-import { PackageStatusBadge } from './PackageStatusBadge'
+import { PackageStatusBadge, STATUS_CONFIG } from './PackageStatusBadge'
 import { useUpdatePackage } from '../hooks/useUpdatePackage'
 import { PackageStatus, PackageResponse } from '../types'
 import { Role } from '@/types/common'
@@ -161,20 +161,25 @@ export function PackageTable({
                   <TableCell>{formatCurrency(pkg.price)}</TableCell>
                   <TableCell>
                     {isStaff ? (
-                      <div className="w-[140px]">
+                      <div className="w-[150px]">
                         <Select
                           disabled={updateMutation.isPending}
                           value={pkg.status}
                           onValueChange={(val) => handleStatusChangeInline(pkg, val as PackageStatus)}
                         >
-                          <SelectTrigger className="h-8 text-xs">
+                          <SelectTrigger className={`h-8 text-sm uppercase font-bold tracking-wide ${STATUS_CONFIG[pkg.status]?.textColor || ''}`}>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value={PackageStatus.PENDING}>Chờ xử lý</SelectItem>
-                            <SelectItem value={PackageStatus.IN_TRANSIT}>Đang giao</SelectItem>
-                            <SelectItem value={PackageStatus.DELIVERED}>Đã giao</SelectItem>
-                            <SelectItem value={PackageStatus.CANCELLED}>Đã hủy</SelectItem>
+                            {Object.values(PackageStatus).map(status => (
+                              <SelectItem 
+                                key={status} 
+                                value={status}
+                                className={`text-sm uppercase font-bold tracking-wide ${STATUS_CONFIG[status]?.textColor || ''}`}
+                              >
+                                {STATUS_CONFIG[status]?.label}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                       </div>

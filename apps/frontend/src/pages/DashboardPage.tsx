@@ -15,6 +15,7 @@ import { FinancialReportCard } from "@/features/dashboard/components/FinancialRe
 import { PackageStatusReport } from "@/features/dashboard/components/PackageStatusReport";
 import { WarehouseBreakdownTable } from "@/features/dashboard/components/WarehouseBreakdownTable";
 import { DashboardSkeleton } from "@/features/dashboard/components/DashboardSkeleton";
+import { Navigate } from "react-router-dom";
 import { AlertCircle } from "lucide-react";
 
 /**
@@ -55,14 +56,18 @@ export function DashboardPage() {
     data: financialData,
     isLoading: isFinancialLoading,
     isError: isFinancialError,
-  } = useFinancialReport(filterParams);
+  } = useFinancialReport(filterParams, { enabled: !isStaff });
 
   // Package status report — same warehouseId filter
   const {
     data: statusData,
     isLoading: isStatusLoading,
     isError: isStatusError,
-  } = usePackageStatusReport(filterParams);
+  } = usePackageStatusReport(filterParams as any, { enabled: !isStaff });
+
+  if (isStaff) {
+    return <Navigate to="/packages" replace />;
+  }
 
   const isLoading = isFinancialLoading || isStatusLoading;
   const isError = isFinancialError || isStatusError;

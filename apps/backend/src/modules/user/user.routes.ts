@@ -226,6 +226,47 @@ router.get(
 
 /**
  * @openapi
+ * /users/profile:
+ *   get:
+ *     summary: Get own profile
+ *     description: Retrieve the profile of the currently authenticated user.
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Profile retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/UserResponse'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.get(
+  "/profile",
+  authorize(Role.ADMIN, Role.MANAGER, Role.STAFF),
+  userController.getProfile(),
+);
+
+/**
+ * @openapi
  * /users/{id}:
  *   get:
  *     summary: Get user by ID
@@ -340,46 +381,6 @@ router.post(
   userController.createUser(),
 );
 
-/**
- * @openapi
- * /users/profile:
- *   get:
- *     summary: Get own profile
- *     description: Retrieve the profile of the currently authenticated user.
- *     tags: [Users]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Profile retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 data:
- *                   $ref: '#/components/schemas/UserResponse'
- *       401:
- *         description: Unauthorized
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       404:
- *         description: User not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- */
-router.get(
-  "/profile",
-  authorize(Role.ADMIN, Role.MANAGER, Role.STAFF),
-  userController.getProfile(),
-);
 
 /**
  * @openapi

@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 import { errorHandler } from "./middlewares/error.middleware";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger.config";
@@ -11,12 +12,14 @@ import warehousesRoute from "@/modules/warehouse/warehouse.routes";
 import packagesRoute from "@/modules/package/package.routes";
 import dashboardRoute from "@/modules/dashboard/dashboard.routes";
 import { AppError } from "./shared/errors/AppError";
+import { env } from "./config/env.config";
 
 const app = express();
 
 app.use(helmet());
-app.use(cors());
+app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(morgan("dev"));
+app.use(cookieParser());
 app.use(express.json());
 
 app.use(

@@ -43,6 +43,7 @@ class AuthenticationService {
   }
 
   async refresh(refreshToken: string) {
+    if (!refreshToken) throw new AppError(401, "No refresh token");
     let payload;
     try {
       payload = jwtService.verifyRefreshToken(refreshToken);

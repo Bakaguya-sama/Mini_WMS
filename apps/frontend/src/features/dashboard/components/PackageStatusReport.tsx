@@ -80,11 +80,11 @@ export function PackageStatusReport({ data }: PackageStatusReportProps) {
                   {cfg.label}
                 </Badge>
               </div>
-              <div className="flex items-center gap-3 text-right">
-                <span className="text-xs text-muted-foreground w-8">
+              <div className="flex items-center gap-4 text-right">
+                <span className="text-sm font-semibold text-muted-foreground w-10">
                   {pct}%
                 </span>
-                <span className="text-xl font-bold text-foreground min-w-[2.5rem] text-right">
+                <span className="text-2xl font-black text-foreground min-w-[3rem] text-right">
                   {count.toLocaleString("vi-VN")}
                 </span>
               </div>
@@ -93,9 +93,9 @@ export function PackageStatusReport({ data }: PackageStatusReportProps) {
         })}
 
         {total > 0 && (
-          <div className="flex justify-between items-center pt-2 border-t border-border text-sm">
-            <span className="text-muted-foreground font-medium">Tổng cộng</span>
-            <span className="font-bold text-3xl">
+          <div className="flex justify-between items-center pt-3 border-t-2 border-border mt-1">
+            <span className="text-muted-foreground font-bold text-base">Tổng cộng</span>
+            <span className="font-black text-3xl text-primary">
               {total.toLocaleString("vi-VN")}
             </span>
           </div>

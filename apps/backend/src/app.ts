@@ -17,7 +17,26 @@ import { env } from "./config/env.config";
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
+const allowedOrigins = env.CORS_ORIGIN 
+  ? env.CORS_ORIGIN.split(',').map(o => o.trim()) 
+  : [];
+
+app.use(cors({ 
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    // If wildcard '*' is in allowedOrigins, dynamically reflect the requesting origin
+    // This is required because 'Access-Control-Allow-Origin: *' is forbidden when credentials: true
+    if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+      return callback(null, origin);
+    }
+    
+    // Otherwise, block the request
+    return callback(null, false);
+  }, 
+  credentials: true 
+}));
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json());

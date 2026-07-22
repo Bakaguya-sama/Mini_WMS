@@ -184,6 +184,7 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
                       type="password"
                       placeholder="Để trống nếu không đổi (Tối thiểu 6 ký tự)"
                       disabled={isPending}
+                      autoComplete="new-password"
                       {...field}
                     />
                   </FormControl>
@@ -205,6 +206,7 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
                       type="password"
                       placeholder="Nhập lại mật khẩu mới"
                       disabled={isPending}
+                      autoComplete="new-password"
                       {...field}
                     />
                   </FormControl>

@@ -39,6 +39,7 @@ export const axiosClient: AxiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
 // ─── Request Interceptor: Attach Bearer token ─────────────────────────────────
@@ -117,25 +118,13 @@ axiosClient.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
 
-      const { refreshToken } = useAuthStore.getState();
-
-      if (!refreshToken) {
-        // No refresh token at all → logout immediately
-        useAuthStore.getState().clearAuth();
-        window.location.href = "/login";
-        return Promise.reject(error);
-      }
-
       try {
-        // POST /auth/refresh — no Bearer token needed (per api-docs.json)
-        const response = await axiosClient.post(ENDPOINTS.AUTH.REFRESH, {
-          refreshToken,
-        });
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-          response.data.data;
+        // POST /auth/refresh — no Bearer token needed (browser sends cookie)
+        const response = await axiosClient.post(ENDPOINTS.AUTH.REFRESH);
+        const { accessToken: newAccessToken } = response.data.data;
 
-        // Update store with the new token pair (rotation)
-        useAuthStore.getState().updateTokens(newAccessToken, newRefreshToken);
+        // Update store with the new token
+        useAuthStore.getState().updateTokens(newAccessToken);
 
         // Process queued requests with new token
         processQueue(null, newAccessToken);

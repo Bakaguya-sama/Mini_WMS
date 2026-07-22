@@ -69,10 +69,10 @@ export function WarehouseBreakdownTable({
                   <td className="px-4 py-3 font-medium text-foreground">
                     {warehouses?.find(w => w.id === row.warehouseId)?.name || `${row.warehouseId.slice(0, 8)}…`}
                   </td>
-                  <td className="px-4 py-3 text-right font-semibold">
+                  <td className="px-4 py-3 text-right text-base font-bold text-foreground">
                     {row.totalPackages.toLocaleString("vi-VN")}
                   </td>
-                  <td className="px-4 py-3 text-right font-semibold text-emerald-600">
+                  <td className="px-4 py-3 text-right text-base font-bold text-emerald-600">
                     {formatCurrency(row.totalRevenue)}
                   </td>
                 </tr>
@@ -80,11 +80,11 @@ export function WarehouseBreakdownTable({
             </tbody>
             <tfoot>
               <tr className="border-t-2 border-border bg-muted/20 font-bold">
-                <td className="px-4 py-3 text-muted-foreground">Tổng cộng</td>
-                <td className="px-4 py-3 text-right">
+                <td className="px-4 py-3 text-muted-foreground text-base">Tổng cộng</td>
+                <td className="px-4 py-3 text-right text-lg font-black text-foreground">
                   {totalPackages.toLocaleString("vi-VN")}
                 </td>
-                <td className="px-4 py-3 text-right text-emerald-600">
+                <td className="px-4 py-3 text-right text-lg font-black text-emerald-600">
                   {formatCurrency(totalRevenue)}
                 </td>
               </tr>

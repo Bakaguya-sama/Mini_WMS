@@ -33,12 +33,18 @@ export async function logout(): Promise<void> {
  * No Bearer token needed per api-docs.json (security: []).
  * Called internally by axiosClient interceptor — exposed here for testing.
  */
-export async function refreshTokens(
-  refreshToken: string,
-): Promise<RefreshResponseData> {
+export async function refreshTokens(): Promise<RefreshResponseData> {
   const response = await axiosClient.post<ApiResponse<RefreshResponseData>>(
-    ENDPOINTS.AUTH.REFRESH,
-    { refreshToken },
+    ENDPOINTS.AUTH.REFRESH
   );
+  return response.data.data;
+}
+
+/**
+ * GET /users/profile
+ * Requires Bearer token (attached by request interceptor).
+ */
+export async function getProfile() {
+  const response = await axiosClient.get<ApiResponse<any>>(ENDPOINTS.USERS.PROFILE);
   return response.data.data;
 }

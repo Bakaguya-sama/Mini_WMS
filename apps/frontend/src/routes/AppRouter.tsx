@@ -6,9 +6,8 @@ import { LoginPage } from '@/pages/LoginPage'
 import { DashboardPage } from '@/pages/DashboardPage'
 import { WarehousesPage } from '@/pages/WarehousesPage'
 import { EmployeesPage } from '@/pages/EmployeesPage'
+import { PackagesPage } from '@/pages/PackagesPage'
 
-// Placeholder pages for future phases — prevents broken links in Sidebar
-import { PlaceholderPage } from '@/pages/PlaceholderPage'
 
 /**
  * Application router.
@@ -42,7 +41,7 @@ export const router = createBrowserRouter([
           // Placeholder routes — will be replaced in Phase 4 & 5
           {
             path: '/packages',
-            element: <PlaceholderPage title="Quản lý Kiện hàng" phase="Phase 5" />,
+            element: <PackagesPage />,
           },
           {
             path: '/warehouses',

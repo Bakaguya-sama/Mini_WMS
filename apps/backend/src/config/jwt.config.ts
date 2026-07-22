@@ -1,4 +1,5 @@
 import { SignOptions } from "jsonwebtoken";
+import { CookieOptions } from "express";
 import { env } from "./env.config";
 
 export const jwtConfig = {
@@ -17,7 +18,10 @@ export const jwtConfig = {
   cookie: {
     httpOnly: true,
     secure: env.NODE_ENV === "production",
-    sameSite: "strict" as const,
+    sameSite: (env.NODE_ENV === "production" ? "none" : "lax") as
+      | "none"
+      | "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000,
-  },
+    path: "/api/v1/auth",
+  } satisfies CookieOptions,
 };

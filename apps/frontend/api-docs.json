@@ -1,8 +1,15 @@
 {
   "openapi": "3.0.0",
-  "info": { "title": "Mini WMS", "version": "1.0.0", "description": "" },
+  "info": {
+    "title": "Mini WMS",
+    "version": "1.0.0",
+    "description": ""
+  },
   "servers": [
-    { "url": "http://localhost:3000/api/v1", "description": "Local" }
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Local"
+    }
   ],
   "components": {
     "securitySchemes": {
@@ -15,44 +22,88 @@
     "schemas": {
       "ErrorResponse": {
         "type": "object",
-        "required": ["success", "statusCode", "message"],
+        "required": [
+          "success",
+          "statusCode",
+          "message"
+        ],
         "properties": {
-          "success": { "type": "boolean", "example": false },
-          "statusCode": { "type": "integer", "example": 400 },
-          "message": { "type": "string", "example": "Invalid input data" },
-          "stack": { "type": "string", "nullable": true }
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "statusCode": {
+            "type": "integer",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Invalid input data"
+          },
+          "stack": {
+            "type": "string",
+            "nullable": true
+          }
         }
       },
       "WarehouseResponse": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "format": "uuid" },
-          "name": { "type": "string", "example": "Main Warehouse" },
-          "createdAt": { "type": "string", "format": "date-time" },
-          "updatedAt": { "type": "string", "format": "date-time" }
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "example": "Main Warehouse"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
         }
       },
       "WarehouseListResponse": {
         "type": "object",
         "properties": {
-          "success": { "type": "boolean", "example": true },
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
           "data": {
             "type": "object",
             "properties": {
               "data": {
                 "type": "array",
-                "items": { "$ref": "#/components/schemas/WarehouseResponse" }
+                "items": {
+                  "$ref": "#/components/schemas/WarehouseResponse"
+                }
               },
-              "total": { "type": "integer", "example": 10 },
-              "page": { "type": "integer", "example": 1 },
-              "limit": { "type": "integer", "example": 20 }
+              "total": {
+                "type": "integer",
+                "example": 10
+              },
+              "page": {
+                "type": "integer",
+                "example": 1
+              },
+              "limit": {
+                "type": "integer",
+                "example": 20
+              }
             }
           }
         }
       },
       "CreateWarehouseInput": {
         "type": "object",
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "properties": {
           "name": {
             "type": "string",
@@ -76,41 +127,84 @@
       "UserResponse": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "format": "uuid" },
-          "email": { "type": "string", "format": "email" },
-          "username": { "type": "string" },
-          "role": { "type": "string", "enum": ["ADMIN", "MANAGER", "STAFF"] },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "username": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "MANAGER",
+              "STAFF"
+            ]
+          },
           "warehouseId": {
             "type": "string",
             "format": "uuid",
             "nullable": true
           },
-          "isBanned": { "type": "boolean", "example": false },
-          "createdAt": { "type": "string", "format": "date-time" },
-          "updatedAt": { "type": "string", "format": "date-time" }
+          "isBanned": {
+            "type": "boolean",
+            "example": false
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
         }
       },
       "UserListResponse": {
         "type": "object",
         "properties": {
-          "success": { "type": "boolean", "example": true },
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
           "data": {
             "type": "object",
             "properties": {
               "data": {
                 "type": "array",
-                "items": { "$ref": "#/components/schemas/UserResponse" }
+                "items": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
               },
-              "total": { "type": "integer", "example": 50 },
-              "page": { "type": "integer", "example": 1 },
-              "limit": { "type": "integer", "example": 20 }
+              "total": {
+                "type": "integer",
+                "example": 50
+              },
+              "page": {
+                "type": "integer",
+                "example": 1
+              },
+              "limit": {
+                "type": "integer",
+                "example": 20
+              }
             }
           }
         }
       },
       "CreateUserInput": {
         "type": "object",
-        "required": ["email", "username", "password", "role"],
+        "required": [
+          "email",
+          "username",
+          "password",
+          "role"
+        ],
         "properties": {
           "email": {
             "type": "string",
@@ -131,7 +225,11 @@
           },
           "role": {
             "type": "string",
-            "enum": ["ADMIN", "MANAGER", "STAFF"],
+            "enum": [
+              "ADMIN",
+              "MANAGER",
+              "STAFF"
+            ],
             "example": "STAFF"
           },
           "warehouseId": {
@@ -145,14 +243,28 @@
       "UpdateUserInput": {
         "type": "object",
         "properties": {
-          "email": { "type": "string", "format": "email" },
-          "username": { "type": "string", "minLength": 3, "maxLength": 50 },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "username": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 50
+          },
           "password": {
             "type": "string",
             "format": "password",
             "minLength": 6
           },
-          "role": { "type": "string", "enum": ["ADMIN", "MANAGER", "STAFF"] },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "MANAGER",
+              "STAFF"
+            ]
+          },
           "warehouseId": {
             "type": "string",
             "format": "uuid",
@@ -163,50 +275,109 @@
       "UpdateProfileInput": {
         "type": "object",
         "properties": {
-          "email": { "type": "string", "format": "email" },
-          "username": { "type": "string", "minLength": 3, "maxLength": 50 },
-          "password": { "type": "string", "format": "password", "minLength": 6 }
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "username": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 50
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "minLength": 6
+          }
         }
       },
       "PackageResponse": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "format": "uuid" },
-          "code": { "type": "string", "example": "PKG-0001" },
-          "price": { "type": "number", "format": "decimal", "example": 199.99 },
-          "warehouseId": { "type": "string", "format": "uuid" },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string",
+            "example": "PKG-0001"
+          },
+          "price": {
+            "type": "number",
+            "format": "decimal",
+            "example": 199.99
+          },
+          "warehouseId": {
+            "type": "string",
+            "format": "uuid"
+          },
           "status": {
             "type": "string",
-            "enum": ["PENDING", "IN_TRANSIT", "DELIVERED", "CANCELLED"]
+            "enum": [
+              "PENDING",
+              "IN_TRANSIT",
+              "DELIVERED",
+              "CANCELLED"
+            ]
           },
-          "version": { "type": "integer", "example": 0 },
-          "createdAt": { "type": "string", "format": "date-time" },
-          "updatedAt": { "type": "string", "format": "date-time" }
+          "version": {
+            "type": "integer",
+            "example": 0
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
         }
       },
       "PackageListResponse": {
         "type": "object",
         "properties": {
-          "success": { "type": "boolean", "example": true },
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
           "data": {
             "type": "object",
             "properties": {
               "data": {
                 "type": "array",
-                "items": { "$ref": "#/components/schemas/PackageResponse" }
+                "items": {
+                  "$ref": "#/components/schemas/PackageResponse"
+                }
               },
-              "total": { "type": "integer", "example": 100 },
-              "page": { "type": "integer", "example": 1 },
-              "limit": { "type": "integer", "example": 20 }
+              "total": {
+                "type": "integer",
+                "example": 100
+              },
+              "page": {
+                "type": "integer",
+                "example": 1
+              },
+              "limit": {
+                "type": "integer",
+                "example": 20
+              }
             }
           }
         }
       },
       "CreatePackageInput": {
         "type": "object",
-        "required": ["code", "warehouseId"],
+        "required": [
+          "code",
+          "warehouseId"
+        ],
         "properties": {
-          "code": { "type": "string", "maxLength": 50, "example": "PKG-0001" },
+          "code": {
+            "type": "string",
+            "maxLength": 50,
+            "example": "PKG-0001"
+          },
           "price": {
             "type": "number",
             "minimum": 0,
@@ -220,22 +391,44 @@
           },
           "status": {
             "type": "string",
-            "enum": ["PENDING", "IN_TRANSIT", "DELIVERED", "CANCELLED"],
+            "enum": [
+              "PENDING",
+              "IN_TRANSIT",
+              "DELIVERED",
+              "CANCELLED"
+            ],
             "default": "PENDING"
           }
         }
       },
       "UpdatePackageInput": {
         "type": "object",
-        "required": ["version"],
+        "required": [
+          "version"
+        ],
         "properties": {
-          "code": { "type": "string", "maxLength": 50 },
-          "price": { "type": "number", "minimum": 0, "example": 299.99 },
+          "code": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "price": {
+            "type": "number",
+            "minimum": 0,
+            "example": 299.99
+          },
           "status": {
             "type": "string",
-            "enum": ["PENDING", "IN_TRANSIT", "DELIVERED", "CANCELLED"]
+            "enum": [
+              "PENDING",
+              "IN_TRANSIT",
+              "DELIVERED",
+              "CANCELLED"
+            ]
           },
-          "warehouseId": { "type": "string", "format": "uuid" },
+          "warehouseId": {
+            "type": "string",
+            "format": "uuid"
+          },
           "version": {
             "type": "integer",
             "minimum": 0,
@@ -247,7 +440,10 @@
       "FinancialReportResponse": {
         "type": "object",
         "properties": {
-          "success": { "type": "boolean", "example": true },
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
           "data": {
             "type": "object",
             "properties": {
@@ -272,8 +468,14 @@
                 "items": {
                   "type": "object",
                   "properties": {
-                    "warehouseId": { "type": "string", "format": "uuid" },
-                    "totalPackages": { "type": "integer", "example": 42 },
+                    "warehouseId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "totalPackages": {
+                      "type": "integer",
+                      "example": 42
+                    },
                     "totalRevenue": {
                       "type": "number",
                       "format": "float",
@@ -289,7 +491,10 @@
       "PackageStatusReportResponse": {
         "type": "object",
         "properties": {
-          "success": { "type": "boolean", "example": true },
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
           "data": {
             "type": "array",
             "items": {
@@ -297,9 +502,17 @@
               "properties": {
                 "status": {
                   "type": "string",
-                  "enum": ["PENDING", "IN_TRANSIT", "DELIVERED", "CANCELLED"]
+                  "enum": [
+                    "PENDING",
+                    "IN_TRANSIT",
+                    "DELIVERED",
+                    "CANCELLED"
+                  ]
                 },
-                "count": { "type": "integer", "example": 42 }
+                "count": {
+                  "type": "integer",
+                  "example": 42
+                }
               }
             }
           }
@@ -307,7 +520,10 @@
       },
       "LoginInput": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": [
+          "email",
+          "password"
+        ],
         "properties": {
           "email": {
             "type": "string",
@@ -324,10 +540,24 @@
       "AuthUser": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "format": "uuid" },
-          "email": { "type": "string" },
-          "username": { "type": "string" },
-          "role": { "type": "string", "enum": ["ADMIN", "MANAGER", "STAFF"] },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "MANAGER",
+              "STAFF"
+            ]
+          },
           "warehouseId": {
             "type": "string",
             "format": "uuid",
@@ -338,7 +568,10 @@
       "LoginResponse": {
         "type": "object",
         "properties": {
-          "success": { "type": "boolean", "example": true },
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
           "data": {
             "type": "object",
             "properties": {
@@ -346,7 +579,9 @@
                 "type": "string",
                 "example": "eyJhbGciOiJIUzI1NiIs..."
               },
-              "user": { "$ref": "#/components/schemas/AuthUser" }
+              "user": {
+                "$ref": "#/components/schemas/AuthUser"
+              }
             }
           }
         }
@@ -354,7 +589,10 @@
       "RefreshResponse": {
         "type": "object",
         "properties": {
-          "success": { "type": "boolean", "example": true },
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
           "data": {
             "type": "object",
             "properties": {
@@ -368,31 +606,49 @@
       }
     }
   },
-  "security": [{ "bearerAuth": [] }],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
   "paths": {
     "/warehouses": {
       "get": {
         "summary": "Get warehouses list",
         "description": "Retrieve a paginated list of warehouses. Accessible by ADMIN only.",
-        "tags": ["Warehouses"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Warehouses"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "query",
             "name": "page",
-            "schema": { "type": "integer", "default": 1 },
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
             "description": "Page number"
           },
           {
             "in": "query",
             "name": "limit",
-            "schema": { "type": "integer", "default": 20 },
+            "schema": {
+              "type": "integer",
+              "default": 20
+            },
             "description": "Items per page"
           },
           {
             "in": "query",
             "name": "search",
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "Search by warehouse name"
           }
         ],
@@ -411,7 +667,9 @@
             "description": "Unauthorized – missing or invalid token",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -419,7 +677,9 @@
             "description": "Insufficient role",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -428,13 +688,21 @@
       "post": {
         "summary": "Create a new warehouse",
         "description": "Create a new warehouse. Accessible by ADMIN only.",
-        "tags": ["Warehouses"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Warehouses"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/CreateWarehouseInput" }
+              "schema": {
+                "$ref": "#/components/schemas/CreateWarehouseInput"
+              }
             }
           }
         },
@@ -446,8 +714,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "data": { "$ref": "#/components/schemas/WarehouseResponse" }
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/WarehouseResponse"
+                    }
                   }
                 }
               }
@@ -457,7 +730,9 @@
             "description": "Invalid input data",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -465,7 +740,9 @@
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -473,7 +750,9 @@
             "description": "Insufficient role",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -481,7 +760,9 @@
             "description": "Warehouse name already exists",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -492,14 +773,23 @@
       "get": {
         "summary": "Get warehouse by ID",
         "description": "Retrieve a single warehouse by its UUID. Accessible by ADMIN, MANAGER, and STAFF.",
-        "tags": ["Warehouses"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Warehouses"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
             "name": "id",
             "required": true,
-            "schema": { "type": "string", "format": "uuid" },
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
             "description": "Warehouse UUID"
           }
         ],
@@ -511,8 +801,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "data": { "$ref": "#/components/schemas/WarehouseResponse" }
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/WarehouseResponse"
+                    }
                   }
                 }
               }
@@ -522,7 +817,9 @@
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -530,7 +827,9 @@
             "description": "Insufficient role",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -538,7 +837,9 @@
             "description": "Warehouse not found",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -547,14 +848,23 @@
       "patch": {
         "summary": "Update a warehouse",
         "description": "Update warehouse details. ADMIN can update any warehouse. MANAGER can only update their own warehouse.",
-        "tags": ["Warehouses"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Warehouses"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
             "name": "id",
             "required": true,
-            "schema": { "type": "string", "format": "uuid" },
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
             "description": "Warehouse UUID"
           }
         ],
@@ -562,7 +872,9 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/UpdateWarehouseInput" }
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWarehouseInput"
+              }
             }
           }
         },
@@ -574,8 +886,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "data": { "$ref": "#/components/schemas/WarehouseResponse" }
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/WarehouseResponse"
+                    }
                   }
                 }
               }
@@ -585,7 +902,9 @@
             "description": "Invalid input data",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -593,7 +912,9 @@
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -601,7 +922,9 @@
             "description": "Insufficient role",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -609,7 +932,9 @@
             "description": "Warehouse not found",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -617,7 +942,9 @@
             "description": "Warehouse name already exists",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -626,14 +953,23 @@
       "delete": {
         "summary": "Delete a warehouse",
         "description": "Soft-delete a warehouse (sets deletedAt). Accessible by ADMIN only.",
-        "tags": ["Warehouses"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Warehouses"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
             "name": "id",
             "required": true,
-            "schema": { "type": "string", "format": "uuid" },
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
             "description": "Warehouse UUID"
           }
         ],
@@ -645,7 +981,9 @@
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -653,7 +991,9 @@
             "description": "Insufficient role",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -661,7 +1001,9 @@
             "description": "Warehouse not found",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -669,7 +1011,9 @@
             "description": "Cannot delete warehouse",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -680,25 +1024,39 @@
       "get": {
         "summary": "Get users list",
         "description": "Retrieve a paginated, filterable list of users. Accessible by ADMIN and MANAGER.",
-        "tags": ["Users"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "query",
             "name": "page",
-            "schema": { "type": "integer", "default": 1 },
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
             "description": "Page number"
           },
           {
             "in": "query",
             "name": "limit",
-            "schema": { "type": "integer", "default": 20 },
+            "schema": {
+              "type": "integer",
+              "default": 20
+            },
             "description": "Items per page"
           },
           {
             "in": "query",
             "name": "search",
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "Search by username or email"
           },
           {
@@ -706,20 +1064,29 @@
             "name": "role",
             "schema": {
               "type": "string",
-              "enum": ["ADMIN", "MANAGER", "STAFF"]
+              "enum": [
+                "ADMIN",
+                "MANAGER",
+                "STAFF"
+              ]
             },
             "description": "Filter by role"
           },
           {
             "in": "query",
             "name": "warehouseId",
-            "schema": { "type": "string", "format": "uuid" },
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
             "description": "Filter by warehouse"
           },
           {
             "in": "query",
             "name": "isBanned",
-            "schema": { "type": "boolean" },
+            "schema": {
+              "type": "boolean"
+            },
             "description": "Filter by ban status"
           },
           {
@@ -727,7 +1094,12 @@
             "name": "sortBy",
             "schema": {
               "type": "string",
-              "enum": ["username", "email", "createdAt", "updatedAt"],
+              "enum": [
+                "username",
+                "email",
+                "createdAt",
+                "updatedAt"
+              ],
               "default": "createdAt"
             }
           },
@@ -736,7 +1108,10 @@
             "name": "sortOrder",
             "schema": {
               "type": "string",
-              "enum": ["asc", "desc"],
+              "enum": [
+                "asc",
+                "desc"
+              ],
               "default": "desc"
             }
           }
@@ -746,7 +1121,9 @@
             "description": "Users retrieved successfully",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/UserListResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/UserListResponse"
+                }
               }
             }
           },
@@ -754,7 +1131,9 @@
             "description": "Unauthorized – missing or invalid token",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -762,7 +1141,9 @@
             "description": "Insufficient role",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -771,13 +1152,21 @@
       "post": {
         "summary": "Create a new user",
         "description": "Create a user account. ADMIN can create any role. MANAGER can only create STAFF within their own warehouse.",
-        "tags": ["Users"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/CreateUserInput" }
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserInput"
+              }
             }
           }
         },
@@ -789,8 +1178,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "data": { "$ref": "#/components/schemas/UserResponse" }
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UserResponse"
+                    }
                   }
                 }
               }
@@ -800,7 +1194,9 @@
             "description": "Invalid input data",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -808,7 +1204,9 @@
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -816,7 +1214,9 @@
             "description": "Insufficient role or MANAGER creating outside own warehouse",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -824,7 +1224,9 @@
             "description": "Email already registered",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -835,14 +1237,23 @@
       "get": {
         "summary": "Get user by ID",
         "description": "Retrieve a single user by their UUID. Accessible by ADMIN and MANAGER.",
-        "tags": ["Users"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
             "name": "id",
             "required": true,
-            "schema": { "type": "string", "format": "uuid" },
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
             "description": "User UUID"
           }
         ],
@@ -854,8 +1265,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "data": { "$ref": "#/components/schemas/UserResponse" }
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UserResponse"
+                    }
                   }
                 }
               }
@@ -865,7 +1281,9 @@
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -873,7 +1291,9 @@
             "description": "Insufficient role",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -881,7 +1301,9 @@
             "description": "User not found",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -890,14 +1312,23 @@
       "patch": {
         "summary": "Update a user",
         "description": "Update user details. ADMIN can update any user. MANAGER can only update users in their warehouse.",
-        "tags": ["Users"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
             "name": "id",
             "required": true,
-            "schema": { "type": "string", "format": "uuid" },
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
             "description": "User UUID"
           }
         ],
@@ -905,7 +1336,9 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/UpdateUserInput" }
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserInput"
+              }
             }
           }
         },
@@ -917,8 +1350,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "data": { "$ref": "#/components/schemas/UserResponse" }
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UserResponse"
+                    }
                   }
                 }
               }
@@ -928,7 +1366,9 @@
             "description": "Invalid input data",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -936,7 +1376,9 @@
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -944,7 +1386,9 @@
             "description": "Insufficient role",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -952,7 +1396,9 @@
             "description": "User not found",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -961,24 +1407,37 @@
       "delete": {
         "summary": "Delete a user",
         "description": "Soft-delete a user (sets deletedAt). Only ADMIN can delete users.",
-        "tags": ["Users"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
             "name": "id",
             "required": true,
-            "schema": { "type": "string", "format": "uuid" },
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
             "description": "User UUID"
           }
         ],
         "responses": {
-          "204": { "description": "User deleted successfully (no content)" },
+          "204": {
+            "description": "User deleted successfully (no content)"
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -986,7 +1445,9 @@
             "description": "Insufficient role",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -994,7 +1455,9 @@
             "description": "User not found",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1002,7 +1465,9 @@
             "description": "Cannot delete user",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -1010,16 +1475,77 @@
       }
     },
     "/users/profile": {
+      "get": {
+        "summary": "Get own profile",
+        "description": "Retrieve the profile of the currently authenticated user.",
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profile retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UserResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
       "patch": {
         "summary": "Update own profile",
         "description": "Update own profile. Any authenticated user can update their email, username, or password. Cannot change role or warehouseId.",
-        "tags": ["Users"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/UpdateProfileInput" }
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileInput"
+              }
             }
           }
         },
@@ -1031,8 +1557,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "data": { "$ref": "#/components/schemas/UserResponse" }
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UserResponse"
+                    }
                   }
                 }
               }
@@ -1042,7 +1573,9 @@
             "description": "Invalid input data",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1050,7 +1583,9 @@
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1058,7 +1593,9 @@
             "description": "User not found",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1066,7 +1603,9 @@
             "description": "Email already registered",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -1077,14 +1616,23 @@
       "patch": {
         "summary": "Ban a user",
         "description": "Ban a user account. ADMIN can ban any user. MANAGER can only ban users in their warehouse.",
-        "tags": ["Users"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
             "name": "id",
             "required": true,
-            "schema": { "type": "string", "format": "uuid" },
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
             "description": "User UUID"
           }
         ],
@@ -1096,8 +1644,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "data": { "$ref": "#/components/schemas/UserResponse" }
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UserResponse"
+                    }
                   }
                 }
               }
@@ -1107,7 +1660,9 @@
             "description": "Cannot ban yourself",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1115,7 +1670,9 @@
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1123,7 +1680,9 @@
             "description": "Insufficient role",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1131,7 +1690,9 @@
             "description": "User not found",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1139,7 +1700,9 @@
             "description": "Account is already banned",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -1150,14 +1713,23 @@
       "patch": {
         "summary": "Unban a user",
         "description": "Restore a banned user account. ADMIN can unban any user. MANAGER can only unban users in their warehouse.",
-        "tags": ["Users"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
             "name": "id",
             "required": true,
-            "schema": { "type": "string", "format": "uuid" },
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
             "description": "User UUID"
           }
         ],
@@ -1169,8 +1741,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "data": { "$ref": "#/components/schemas/UserResponse" }
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UserResponse"
+                    }
                   }
                 }
               }
@@ -1180,7 +1757,9 @@
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1188,7 +1767,9 @@
             "description": "Insufficient role",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1196,7 +1777,9 @@
             "description": "User not found",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1204,7 +1787,9 @@
             "description": "Account is not banned",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -1215,25 +1800,40 @@
       "get": {
         "summary": "Get packages list",
         "description": "Retrieve a paginated, filterable list of packages. ADMIN sees all packages. MANAGER and STAFF are scoped to their warehouse.\n",
-        "tags": ["Packages"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Packages"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "query",
             "name": "page",
-            "schema": { "type": "integer", "default": 1 },
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
             "description": "Page number"
           },
           {
             "in": "query",
             "name": "limit",
-            "schema": { "type": "integer", "default": 20 },
+            "schema": {
+              "type": "integer",
+              "default": 20
+            },
             "description": "Items per page"
           },
           {
             "in": "query",
             "name": "warehouseId",
-            "schema": { "type": "string", "format": "uuid" },
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
             "description": "Filter by warehouse (ADMIN only)"
           },
           {
@@ -1241,14 +1841,21 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": ["PENDING", "IN_TRANSIT", "DELIVERED", "CANCELLED"]
+              "enum": [
+                "PENDING",
+                "IN_TRANSIT",
+                "DELIVERED",
+                "CANCELLED"
+              ]
             },
             "description": "Filter by status"
           },
           {
             "in": "query",
             "name": "search",
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "Search by package code"
           },
           {
@@ -1256,14 +1863,26 @@
             "name": "sortBy",
             "schema": {
               "type": "string",
-              "enum": ["code", "price", "status", "createdAt", "updatedAt"]
+              "enum": [
+                "code",
+                "price",
+                "status",
+                "createdAt",
+                "updatedAt"
+              ]
             },
             "description": "Sort field"
           },
           {
             "in": "query",
             "name": "sortOrder",
-            "schema": { "type": "string", "enum": ["asc", "desc"] },
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            },
             "description": "Sort order"
           }
         ],
@@ -1272,7 +1891,9 @@
             "description": "Packages retrieved successfully",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/PackageListResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/PackageListResponse"
+                }
               }
             }
           },
@@ -1280,7 +1901,9 @@
             "description": "Unauthorized – missing or invalid token",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -1289,13 +1912,21 @@
       "post": {
         "summary": "Create a package",
         "description": "Create a new package. ADMIN can create in any warehouse. MANAGER can only create in their own warehouse.\n",
-        "tags": ["Packages"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Packages"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/CreatePackageInput" }
+              "schema": {
+                "$ref": "#/components/schemas/CreatePackageInput"
+              }
             }
           }
         },
@@ -1307,8 +1938,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "data": { "$ref": "#/components/schemas/PackageResponse" }
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/PackageResponse"
+                    }
                   }
                 }
               }
@@ -1318,7 +1954,9 @@
             "description": "Invalid input data",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1326,7 +1964,9 @@
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1334,7 +1974,9 @@
             "description": "MANAGER creating in a warehouse they do not manage",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1342,7 +1984,9 @@
             "description": "Package code already exists",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -1353,14 +1997,23 @@
       "get": {
         "summary": "Get package by ID",
         "description": "Retrieve a single package by UUID. MANAGER and STAFF are scoped to their warehouse.",
-        "tags": ["Packages"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Packages"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
             "name": "id",
             "required": true,
-            "schema": { "type": "string", "format": "uuid" },
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
             "description": "Package UUID"
           }
         ],
@@ -1372,8 +2025,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "data": { "$ref": "#/components/schemas/PackageResponse" }
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/PackageResponse"
+                    }
                   }
                 }
               }
@@ -1383,7 +2041,9 @@
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1391,7 +2051,9 @@
             "description": "Package belongs to a different warehouse",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1399,7 +2061,9 @@
             "description": "Package not found",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -1408,14 +2072,23 @@
       "patch": {
         "summary": "Update a package",
         "description": "Update package fields (code, price, status, warehouseId). ADMIN can update any package. MANAGER can only update packages in their warehouse. STAFF can only update the status of packages in their warehouse. Uses optimistic locking – the `version` field must match the current record version to prevent concurrent update conflicts.\n",
-        "tags": ["Packages"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Packages"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
             "name": "id",
             "required": true,
-            "schema": { "type": "string", "format": "uuid" },
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
             "description": "Package UUID"
           }
         ],
@@ -1423,7 +2096,9 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/UpdatePackageInput" }
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePackageInput"
+              }
             }
           }
         },
@@ -1435,8 +2110,13 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "example": true },
-                    "data": { "$ref": "#/components/schemas/PackageResponse" }
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/PackageResponse"
+                    }
                   }
                 }
               }
@@ -1446,7 +2126,9 @@
             "description": "Invalid input data or Invalid status transition",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1454,7 +2136,9 @@
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1462,7 +2146,9 @@
             "description": "Insufficient role or STAFF/MANAGER trying to edit restricted fields",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1470,7 +2156,9 @@
             "description": "Package/Warehouse not found",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1478,7 +2166,9 @@
             "description": "Version conflict – record was modified by another request",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -1487,24 +2177,37 @@
       "delete": {
         "summary": "Delete a package",
         "description": "Soft-delete a package (sets deletedAt). Only ADMIN and Manager can delete packages.",
-        "tags": ["Packages"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Packages"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
             "name": "id",
             "required": true,
-            "schema": { "type": "string", "format": "uuid" },
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
             "description": "Package UUID"
           }
         ],
         "responses": {
-          "204": { "description": "Package deleted successfully (no content)" },
+          "204": {
+            "description": "Package deleted successfully (no content)"
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1512,7 +2215,9 @@
             "description": "Insufficient role",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1520,7 +2225,9 @@
             "description": "Package not found",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1528,7 +2235,9 @@
             "description": "Cannot delete delivered package",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -1539,13 +2248,22 @@
       "get": {
         "summary": "Get financial report",
         "description": "Retrieve a financial report based on packages. ADMIN sees the report across all warehouses (or can filter by warehouseId). When warehouseId is omitted, the response includes byWarehouse breakdown. MANAGER is restricted to seeing the report for their own warehouse.\n",
-        "tags": ["Dashboard"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Dashboard"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "query",
             "name": "warehouseId",
-            "schema": { "type": "string", "format": "uuid" },
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
             "description": "Filter by warehouse (ADMIN only)"
           }
         ],
@@ -1564,7 +2282,9 @@
             "description": "Unauthorized – missing or invalid token",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1572,7 +2292,9 @@
             "description": "Insufficient role",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1580,7 +2302,9 @@
             "description": "Warehouse not found",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -1591,13 +2315,22 @@
       "get": {
         "summary": "Get package status report",
         "description": "Retrieve package status breakdown by warehouse scope. ADMIN sees all warehouses (or can filter by warehouseId). MANAGER is restricted to their own warehouse.\n",
-        "tags": ["Dashboard"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Dashboard"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "in": "query",
             "name": "warehouseId",
-            "schema": { "type": "string", "format": "uuid" },
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
             "description": "Filter by warehouse (ADMIN only)"
           }
         ],
@@ -1616,7 +2349,9 @@
             "description": "Unauthorized – missing or invalid token",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1624,7 +2359,9 @@
             "description": "Insufficient role",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1632,7 +2369,9 @@
             "description": "Warehouse not found",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -1643,13 +2382,17 @@
       "post": {
         "summary": "Login",
         "description": "Authenticate with email and password. Returns a JWT access token (expires in 15 minutes) in the response body. A refresh token (expires in 7 days, single-use rotation) is set as an HttpOnly, Secure, SameSite=None cookie named `refreshToken` — it is NEVER exposed in the response body and cannot be read via client-side JavaScript.\n",
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "security": [],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/LoginInput" }
+              "schema": {
+                "$ref": "#/components/schemas/LoginInput"
+              }
             }
           }
         },
@@ -1666,7 +2409,9 @@
             },
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/LoginResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
               }
             }
           },
@@ -1674,7 +2419,9 @@
             "description": "Invalid input data (invalid email format, password too short)",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1682,7 +2429,9 @@
             "description": "Incorrect email or password",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1690,7 +2439,9 @@
             "description": "The account has been banned",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -1701,8 +2452,14 @@
       "post": {
         "summary": "Refresh access token",
         "description": "Exchanges the HttpOnly `refreshToken` cookie (sent automatically by the browser, requires `credentials: \"include\"` on the client) for a new access token. Uses single-use rotation — the server issues a new refresh token cookie and immediately invalidates the previous one. No request body is required; the refresh token is NEVER read from or written to the request/response body.\n",
-        "tags": ["Auth"],
-        "security": [{ "cookieAuth": [] }],
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Token refreshed successfully. A new `Set-Cookie` header replaces the previous refresh token.",
@@ -1716,7 +2473,9 @@
             },
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/RefreshResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshResponse"
+                }
               }
             }
           },
@@ -1724,7 +2483,9 @@
             "description": "Missing, invalid, expired, or already-used (revoked) refresh token cookie",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -1732,7 +2493,9 @@
             "description": "The account has been banned",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
@@ -1743,8 +2506,14 @@
       "post": {
         "summary": "Logout",
         "description": "Revokes the current refresh token server-side and clears the `refreshToken` cookie via `Set-Cookie` with an expired date.\n",
-        "tags": ["Auth"],
-        "security": [{ "bearerAuth": [] }],
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "204": {
             "description": "Logged out successfully. The `refreshToken` cookie is cleared.",
@@ -1761,7 +2530,9 @@
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }

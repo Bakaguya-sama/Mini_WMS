@@ -100,6 +100,12 @@ class UserService {
     return this.mapUserToResponse(updated);
   }
 
+  async getProfile(currentUser: AuthenticatedUser) {
+    const user = await userRepository.findUserById(currentUser.sub);
+    if (!user) throw new AppError(404, "User does not exist");
+    return this.mapUserToResponse(user);
+  }
+
   async updateProfile(dto: UpdateProfileDto, currentUser: AuthenticatedUser) {
     const dataToUpdate: Prisma.UserUpdateInput = { ...dto };
 

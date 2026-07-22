@@ -90,14 +90,18 @@ axiosClient.interceptors.response.use(
       // Case 1: The refresh request itself failed → full logout
       if (originalRequest.url === ENDPOINTS.AUTH.REFRESH) {
         useAuthStore.getState().clearAuth();
-        window.location.href = "/login";
+        if (window.location.pathname !== '/login') {
+          window.location.href = "/login";
+        }
         return Promise.reject(error);
       }
 
       // Case 2: Already retried once → don't retry again
       if (originalRequest._retry) {
         useAuthStore.getState().clearAuth();
-        window.location.href = "/login";
+        if (window.location.pathname !== '/login') {
+          window.location.href = "/login";
+        }
         return Promise.reject(error);
       }
 
@@ -136,7 +140,9 @@ axiosClient.interceptors.response.use(
         // Refresh also failed → full logout
         processQueue(refreshError, null);
         useAuthStore.getState().clearAuth();
-        window.location.href = "/login";
+        if (window.location.pathname !== '/login') {
+          window.location.href = "/login";
+        }
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

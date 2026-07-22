@@ -13,14 +13,13 @@ export interface AuthUser {
 // ─── Store State & Actions ───────────────────────────────────────────────────
 interface AuthState {
   accessToken: string | null
-  refreshToken: string | null
   user: AuthUser | null
 
   /** Called after successful login — sets all auth state */
-  setAuth: (accessToken: string, refreshToken: string, user: AuthUser) => void
+  setAuth: (accessToken: string, user: AuthUser) => void
 
-  /** Called after successful token refresh — updates both tokens only */
-  updateTokens: (accessToken: string, refreshToken: string) => void
+  /** Called after successful token refresh — updates accessToken only */
+  updateTokens: (accessToken: string) => void
 
   /** Called on logout or when refresh token fails — clears all auth state */
   clearAuth: () => void
@@ -30,21 +29,20 @@ interface AuthState {
  * Zustand auth store — intentionally NOT persisted (in-memory only).
  *
  * Per CONTEXT.md §5: Tokens stored in-memory for XSS safety.
- * F5 → session lost → redirect to /login. This is ACCEPTED behavior.
+ * F5 → AuthProvider will silently refresh session before app mounts.
  *
  * Do NOT add localStorage/sessionStorage persistence here.
  */
 export const useAuthStore = create<AuthState>()((set) => ({
   accessToken: null,
-  refreshToken: null,
   user: null,
 
-  setAuth: (accessToken, refreshToken, user) =>
-    set({ accessToken, refreshToken, user }),
+  setAuth: (accessToken, user) =>
+    set({ accessToken, user }),
 
-  updateTokens: (accessToken, refreshToken) =>
-    set({ accessToken, refreshToken }),
+  updateTokens: (accessToken) =>
+    set({ accessToken }),
 
   clearAuth: () =>
-    set({ accessToken: null, refreshToken: null, user: null }),
+    set({ accessToken: null, user: null }),
 }))

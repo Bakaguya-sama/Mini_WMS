@@ -7,12 +7,15 @@ import { Toaster } from 'sonner'
 
 import { router } from './routes/AppRouter'
 import { queryClient } from './lib/queryClient'
+import { AuthProvider } from './features/auth/components/AuthProvider'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
       {/* Toast notifications — sonner, configured for dark theme */}
       <Toaster
         position="top-right"

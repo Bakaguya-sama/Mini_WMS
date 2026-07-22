@@ -18,8 +18,8 @@ export function useLogin() {
   return useMutation({
     mutationFn: (data: LoginInput) => login(data),
     onSuccess: (responseData) => {
-      const { accessToken, refreshToken, user } = responseData
-      setAuth(accessToken, refreshToken, user)
+      const { accessToken, user } = responseData
+      setAuth(accessToken, user)
       toast.success(`Chào mừng trở lại, ${user.username}!`)
       navigate('/dashboard', { replace: true })
     },

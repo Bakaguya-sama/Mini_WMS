@@ -19,7 +19,6 @@ export interface LoginInput {
 /** data field of LoginResponse in api-docs.json */
 export interface LoginResponseData {
   accessToken: string
-  refreshToken: string
   user: AuthUser
 }
 
@@ -27,5 +26,4 @@ export interface LoginResponseData {
 /** data field of /auth/refresh response */
 export interface RefreshResponseData {
   accessToken: string
-  refreshToken: string
 }

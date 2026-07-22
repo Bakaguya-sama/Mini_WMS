@@ -13,14 +13,14 @@ import { Role } from '@/types/common'
  * - Calls onSuccess callback (used by ProfileDialog to close itself)
  */
 export function useUpdateProfile(options?: { onSuccess?: () => void }) {
-  const { user, setAuth, accessToken, refreshToken } = useAuthStore()
+  const { user, setAuth, accessToken } = useAuthStore()
 
   return useMutation({
     mutationFn: (data: UpdateProfileInput) => updateProfile(data),
     onSuccess: (updatedUser) => {
       // Sync the updated user info back into the auth store
-      if (user && accessToken && refreshToken) {
-        setAuth(accessToken, refreshToken, {
+      if (user && accessToken) {
+        setAuth(accessToken, {
           id: updatedUser.id,
           email: updatedUser.email,
           username: updatedUser.username,

@@ -273,4 +273,4 @@ Tương tự cho `Package` và `Warehouse`: `DELETE` tồn tại trong API nhưn
 - Manager — Dashboard: giống Admin nhưng không có filter kho.
 - Manager — Nhân viên: `Table` Staff thuộc kho mình, `DropdownMenu` action (Sửa/Khóa/Mở khóa).
 - Staff — Dashboard: chỉ 1 Card "Tổng kiện hàng".
-- Staff — Kiện hàng: `Table` + `Select` đổi status ngay trên dòng, không có form sửa đầy đủ.
+- Staff — Kiện hàng: `Table` + `Select` đổi status ngay trên dòng, không có form sửa đầy đủ..

@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Package, Search, Plus } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Search, Plus } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { Role } from '@/types/common'
 import { usePackages } from '@/features/packages/hooks/usePackages'
@@ -32,11 +32,20 @@ export function PackagesPage() {
   const [searchInput, setSearchInput] = useState('') // for the input field before submit
   const [statusFilter, setStatusFilter] = useState<PackageStatus | 'ALL'>('ALL')
   const [warehouseFilter, setWarehouseFilter] = useState<string>('ALL')
-  
+
   const [sortBy, setSortBy] = useState<string>('createdAt')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
 
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
+
+  // Auto-search debounce
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearch(searchInput)
+      setPage(1)
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [searchInput])
 
   // Fetch warehouses for Admin filter
   const { data: warehousesData } = useWarehouses({ enabled: isAdmin })
@@ -68,9 +77,9 @@ export function PackagesPage() {
     <div className="space-y-6">
       {/* Page header */}
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+        {/* <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
           <Package className="h-5 w-5 text-primary" />
-        </div>
+        </div> */}
         <div>
           <h1 className="text-2xl font-bold text-foreground tracking-tight">
             Quản lý Kiện hàng
@@ -86,22 +95,22 @@ export function PackagesPage() {
         <div className="flex flex-wrap gap-2 items-center">
           <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
             <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                className="pl-8 w-[200px]"
+                className="pl-8 w-[280px] h-10"
                 placeholder="Tìm mã kiện hàng..."
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
               />
             </div>
-            <Button type="submit" variant="outline" size="sm">Tìm</Button>
+            <Button type="submit" variant="outline" className="h-10 px-6">Tìm</Button>
           </form>
 
           <Select
             value={statusFilter}
             onValueChange={(v) => { setStatusFilter(v as any); setPage(1) }}
           >
-            <SelectTrigger className="w-[140px] h-9">
+            <SelectTrigger className="w-[180px] h-10">
               <SelectValue placeholder="Trạng thái" />
             </SelectTrigger>
             <SelectContent>
@@ -118,7 +127,7 @@ export function PackagesPage() {
               value={warehouseFilter}
               onValueChange={(v) => { setWarehouseFilter(v); setPage(1) }}
             >
-              <SelectTrigger className="w-[180px] h-9">
+              <SelectTrigger className="w-[220px] h-10">
                 <SelectValue placeholder="Chọn kho" />
               </SelectTrigger>
               <SelectContent>
@@ -133,7 +142,7 @@ export function PackagesPage() {
 
         {/* Create button for Admin and Manager only */}
         {!isStaff && (
-          <Button onClick={() => setCreateDialogOpen(true)} size="sm">
+          <Button onClick={() => setCreateDialogOpen(true)} className="h-10 px-4">
             <Plus className="mr-1.5 h-4 w-4" />
             Thêm kiện hàng
           </Button>

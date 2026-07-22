@@ -42,6 +42,14 @@ class UserController {
     });
   }
 
+  getProfile() {
+    return asyncHandler(async (req: Request, res: Response) => {
+      const result = await userService.getProfile(req.user);
+
+      res.status(200).json(success(result));
+    });
+  }
+
   updateProfile() {
     return asyncHandler(async (req: Request, res: Response) => {
       const result = await userService.updateProfile(req.body, req.user);

@@ -73,19 +73,29 @@ Quy tắc xử lý lỗi trong `axiosClient.ts`:
 
 ---
 
-# 5. AUTH & TOKEN HANDLING
+# 5. AUTH & TOKEN HANDLING (httpOnly Cookie cho refresh token)
 
-- `POST /auth/login` — trả về `accessToken` (hết hạn sau 15 phút), `refreshToken` (hết hạn sau 7 ngày, dùng rotation), và `user` (xem `LoginResponse` trong spec).
-- `POST /auth/refresh` — body `{ refreshToken }`, KHÔNG cần Bearer token. Trả về cặp `accessToken`/`refreshToken` MỚI hoàn toàn (rotation — refresh token cũ bị vô hiệu hóa ngay sau khi dùng, chỉ dùng được đúng 1 lần).
-- `POST /auth/logout` — CẦN Bearer `accessToken`. Vô hiệu hóa `refreshToken` hiện tại phía server (user phải login lại từ đầu sau khi logout, không thể refresh nữa).
+- `POST /auth/login` — trả về `accessToken` (hết hạn sau 15 phút) + `user` trong response body. `refreshToken` (hết hạn sau 7 ngày, single-use rotation) được server set qua header `Set-Cookie` (`HttpOnly`, `Secure`, `SameSite=None`) — **KHÔNG xuất hiện trong response body**, JS không đọc được, FE không cần và không thể tự lưu nó.
+- `POST /auth/refresh` — KHÔNG cần body, KHÔNG cần header `Authorization`. Browser tự động đính kèm cookie `refreshToken` (điều kiện: request phải gửi kèm `withCredentials: true`). Trả về `accessToken` MỚI trong body; server tự set cookie `refreshToken` mới qua `Set-Cookie` (rotation — cookie cũ bị vô hiệu hóa ngay sau khi dùng).
+- `POST /auth/logout` — CẦN Bearer `accessToken`. Server vô hiệu hóa refresh token phía DB và trả `Set-Cookie` với `Max-Age=0` để xóa cookie khỏi trình duyệt.
+- **Cấu hình bắt buộc ở `axiosClient.ts`:**
+
+```ts
+const axiosClient = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  withCredentials: true, // BẮT BUỘC — nếu thiếu, browser sẽ KHÔNG gửi/nhận cookie refreshToken
+});
+```
+
 - **axiosClient interceptor (bắt buộc implement đúng luồng này):**
   1. Request interceptor: gắn `Authorization: Bearer <accessToken>` từ `authStore` vào mọi request (trừ `/auth/login`, `/auth/refresh`).
   2. Response interceptor: khi nhận `401` từ 1 request bất kỳ (không phải chính request `/auth/refresh`) VÀ request đó chưa từng retry (đánh dấu qua `config._retry`):
-     - Gọi `POST /auth/refresh` với `refreshToken` hiện có trong store.
-     - Nếu thành công: cập nhật `accessToken`/`refreshToken` mới vào store, gắn `_retry = true`, retry lại request gốc đúng 1 lần.
-     - Nếu `/auth/refresh` cũng trả `401` (refresh token hết hạn/bị revoke): clear toàn bộ auth state, redirect `/login`.
+     - Gọi `POST /auth/refresh` — KHÔNG cần truyền gì, cookie tự động gửi kèm.
+     - Nếu thành công: cập nhật `accessToken` mới vào store, gắn `_retry = true`, retry lại request gốc đúng 1 lần.
+     - Nếu `/auth/refresh` cũng trả `401` (cookie hết hạn/không còn hợp lệ): clear `accessToken`/`user` khỏi store, redirect `/login`.
   3. Dùng cờ tránh nhiều request 401 cùng lúc gọi `/auth/refresh` song song (gộp thành 1 lần refresh, các request khác chờ kết quả rồi retry theo).
-- **Lưu token ở đâu:** Zustand store (in-memory), KHÔNG dùng `localStorage`/`sessionStorage`. F5 trang sẽ mất session, cần đăng nhập lại — đây là hành vi CHẤP NHẬN ĐƯỢC cho scope hiện tại (đánh đổi lấy an toàn hơn trước XSS so với việc persist token vào localStorage).
+- **F5 trang không mất session:** khi app khởi động (mount lần đầu / F5), luôn gọi thử `POST /auth/refresh` trước khi render route — nếu thành công (cookie còn hợp lệ), khôi phục `accessToken` (và gọi thêm API lấy `user` nếu cần) mà không cần bắt đăng nhập lại. Nếu thất bại, coi như chưa đăng nhập, render trang login bình thường.
+- **Lưu token ở đâu:** `accessToken` lưu trong Zustand store (in-memory), KHÔNG dùng `localStorage`/`sessionStorage`. `refreshToken` KHÔNG được FE lưu trữ dưới bất kỳ hình thức nào — nó chỉ tồn tại trong cookie do browser tự quản lý, FE không đọc, không ghi, không truyền tay nó ở bất kỳ đâu trong code.
 
 ---
 

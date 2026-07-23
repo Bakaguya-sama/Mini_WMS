@@ -1,7 +1,9 @@
-import { Menu } from 'lucide-react'
+import { Menu, MapPin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/store/authStore'
 import { Role } from '@/types/common'
+import { useQuery } from '@tanstack/react-query'
+import { getWarehouseById } from '@/features/warehouses/api/warehouseApi'
 
 // ─── Role badge styling ───────────────────────────────────────────────────────
 const roleBadgeClass: Record<Role, string> = {
@@ -25,6 +27,13 @@ interface HeaderProps {
 export function Header({ onMenuToggle, profileMenu }: HeaderProps) {
   const { user } = useAuthStore()
 
+  // Fetch the warehouse name if the user belongs to a specific warehouse
+  const { data: userWarehouse } = useQuery({
+    queryKey: ['warehouse', user?.warehouseId],
+    queryFn: () => getWarehouseById(user!.warehouseId!),
+    enabled: !!user?.warehouseId,
+  })
+
   if (!user) return null
 
   return (
@@ -44,7 +53,13 @@ export function Header({ onMenuToggle, profileMenu }: HeaderProps) {
       </div>
 
       {/* Right: User info + actions */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
+        {/* Warehouse Indicator */}
+        <div className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-muted-foreground bg-muted/50 px-2.5 py-1 rounded-md border border-border/50">
+          <MapPin className="w-3.5 h-3.5" />
+          {userWarehouse ? userWarehouse.name : 'Hệ thống'}
+        </div>
+
         {/* Role badge */}
         <span
           className={`hidden sm:inline-flex text-[11px] px-2 py-0.5 rounded-full border font-semibold uppercase tracking-wide ${roleBadgeClass[user.role]}`}

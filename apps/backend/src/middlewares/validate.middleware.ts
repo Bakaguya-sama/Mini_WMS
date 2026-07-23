@@ -20,12 +20,11 @@ export const validate = <
     });
 
     if (!result.success) {
-      const errors = result.error.issues.map((issue) => ({
-        field: issue.path.join("."),
-        message: issue.message,
-      }));
+      const errorMessages = result.error.issues
+        .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
+        .join("; ");
 
-      return next(new AppError(400, `Validation failed: ${errors}`));
+      return next(new AppError(400, `Validation failed: ${errorMessages}`));
     }
 
     const data = result.data as z.infer<T>;

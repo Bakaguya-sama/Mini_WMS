@@ -121,7 +121,7 @@ export function EmployeeDialog({ open, onOpenChange, user, isManager = false }: 
 // ─── Create form ─────────────────────────────────────────────────────────────
 
 function CreateForm({
-  isPending, createMutation, roleOptions, warehousesData, isManager, onClose,
+  isPending, createMutation, roleOptions, warehousesData, isManager, onClose, managerWarehouseId
 }: {
   isPending: boolean
   createMutation: ReturnType<typeof useCreateUser>
@@ -211,7 +211,7 @@ function CreateForm({
 // ─── Edit form ───────────────────────────────────────────────────────────────
 
 function EditForm({
-  user, isPending, updateMutation, roleOptions, warehousesData, isManager, onClose,
+  user, isPending, updateMutation, roleOptions, warehousesData, isManager, onClose, managerWarehouseId
 }: {
   user: UserResponse
   isPending: boolean

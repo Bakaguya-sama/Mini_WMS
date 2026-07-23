@@ -12,7 +12,5 @@ export function useWarehouseList(params?: WarehouseListParams, options?: { enabl
     queryKey: ['warehouses', 'list', params],
     queryFn: () => getWarehouses(params),
     enabled: options?.enabled ?? true,
-    refetchInterval: 10000,
-    refetchOnWindowFocus: true,
   })
 }

@@ -1,9 +1,10 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import { useUIStore } from "@/store/uiStore"
 
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
-  ({ className, type, ...props }, ref) => {
+  ({ className, type, onFocus, onBlur, ...props }, ref) => {
     return (
       <input
         type={type}
@@ -12,6 +13,14 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
           className
         )}
         ref={ref}
+        onFocus={(e) => {
+          useUIStore.getState().setInteracting(true)
+          onFocus?.(e)
+        }}
+        onBlur={(e) => {
+          useUIStore.getState().setInteracting(false)
+          onBlur?.(e)
+        }}
         {...props}
       />
     )

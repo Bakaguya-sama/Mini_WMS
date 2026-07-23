@@ -27,10 +27,22 @@ const DialogOverlay = React.forwardRef<
 ))
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
+import { useUIStore } from "@/store/uiStore"
+
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+>(({ className, children, ...props }, ref) => {
+  React.useEffect(() => {
+    // When a dialog opens, pause global polling
+    useUIStore.getState().setInteracting(true)
+    return () => {
+      // When it closes, resume polling (setTimeout to ensure animations finish)
+      setTimeout(() => useUIStore.getState().setInteracting(false), 300)
+    }
+  }, [])
+
+  return (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
@@ -53,7 +65,8 @@ const DialogContent = React.forwardRef<
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>
-))
+  )
+})
 DialogContent.displayName = DialogPrimitive.Content.displayName
 
 const DialogHeader = ({

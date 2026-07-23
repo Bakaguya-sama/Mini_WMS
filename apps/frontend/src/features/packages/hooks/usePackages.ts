@@ -10,7 +10,5 @@ export function usePackages(params?: PackageListParams) {
   return useQuery({
     queryKey: ['packages', params],
     queryFn: () => getPackages(params),
-    refetchInterval: 10000,
-    refetchOnWindowFocus: true,
   })
 }

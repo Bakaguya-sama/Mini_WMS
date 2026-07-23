@@ -34,6 +34,10 @@ import { PackageStatusBadge, STATUS_CONFIG } from './PackageStatusBadge'
 import { useUpdatePackage } from '../hooks/useUpdatePackage'
 import { PackageStatus, PackageResponse } from '../types'
 import { Role } from '@/types/common'
+import { useWarehouses } from '@/features/warehouses/hooks/useWarehouses'
+import { getWarehouseById } from '@/features/warehouses/api/warehouseApi'
+import { useAuthStore } from '@/store/authStore'
+import { useQuery } from '@tanstack/react-query'
 
 interface PackageTableProps {
   data: PackageResponse[]
@@ -69,6 +73,24 @@ export function PackageTable({
   const isAdmin = userRole === Role.ADMIN
   const isStaff = userRole === Role.STAFF
   const totalPages = Math.ceil(total / limit)
+
+  // Fetch warehouses to map warehouseId -> name
+  const { data: warehousesData } = useWarehouses({ enabled: isAdmin })
+  
+  // For Manager/Staff, fetch their specific warehouse
+  const { user: currentUser } = useAuthStore()
+  const { data: myWarehouse } = useQuery({
+    queryKey: ['warehouse', currentUser?.warehouseId],
+    queryFn: () => getWarehouseById(currentUser!.warehouseId!),
+    enabled: !isAdmin && !!currentUser?.warehouseId,
+  })
+
+  const warehouseMap = new Map(
+    warehousesData?.data.map((w) => [w.id, w.name]) || []
+  )
+  if (myWarehouse) {
+    warehouseMap.set(myWarehouse.id, myWarehouse.name)
+  }
 
   function formatCurrency(value: number) {
     return new Intl.NumberFormat('vi-VN', {
@@ -129,6 +151,7 @@ export function PackageTable({
               >
                 <div className="flex items-center">Trạng thái {renderSortIcon('status')}</div>
               </TableHead>
+              <TableHead>Kho</TableHead>
               <TableHead 
                 className="cursor-pointer hover:bg-muted/80" 
                 onClick={() => toggleSort('createdAt')}
@@ -143,14 +166,14 @@ export function PackageTable({
             {isLoading ? (
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
-                  {Array.from({ length: 5 }).map((__, j) => (
+                  {Array.from({ length: 6 }).map((__, j) => (
                     <TableCell key={j}><Skeleton className="h-5 w-full" /></TableCell>
                   ))}
                 </TableRow>
               ))
             ) : data.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center text-muted-foreground py-10">
+                <TableCell colSpan={6} className="text-center text-muted-foreground py-10">
                   Không có kiện hàng nào
                 </TableCell>
               </TableRow>
@@ -186,6 +209,11 @@ export function PackageTable({
                     ) : (
                       <PackageStatusBadge status={pkg.status} />
                     )}
+                  </TableCell>
+                  <TableCell className="text-sm font-medium">
+                    {pkg.warehouseId
+                      ? warehouseMap.get(pkg.warehouseId) || 'Không xác định'
+                      : 'Không xác định'}
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
                     {new Date(pkg.createdAt).toLocaleDateString('vi-VN')}

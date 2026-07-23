@@ -105,8 +105,6 @@ function ManagerWarehouseView({
     queryKey: ["warehouses", "by-id", warehouseId],
     queryFn: () => getWarehouseById(warehouseId!),
     enabled: !!warehouseId,
-    refetchInterval: 10000,
-    refetchOnWindowFocus: true,
   });
 
   const warehouseList: WarehouseResponse[] = data ? [data] : [];

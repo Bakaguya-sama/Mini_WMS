@@ -37,7 +37,9 @@ export const findUsersByFilterSchema = z.object({
   query: paginationSchema.extend({
     warehouseId: z.uuidv4().optional(),
     role: z.enum(Role).optional(),
-    isBanned: z.coerce.boolean().optional(),
+    isBanned: z
+      .union([z.boolean(), z.enum(["true", "false"]).transform((v) => v === "true")])
+      .optional(),
     search: z.string().min(1).optional(),
     sortBy: z.enum(sortFields).default("username"),
     sortOrder: z.enum(["asc", "desc"]).default("desc"),

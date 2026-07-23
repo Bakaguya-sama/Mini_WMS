@@ -30,6 +30,7 @@ import { useUpdateUser } from '../hooks/useUpdateUser'
 import { useWarehouses } from '@/features/warehouses/hooks/useWarehouses'
 import { Role } from '@/types/common'
 import type { UserResponse } from '../types'
+import { useAuthStore } from '@/store/authStore'
 
 // ─── Schemas per api-docs.json constraints ────────────────────────────────────
 
@@ -99,6 +100,7 @@ export function EmployeeDialog({ open, onOpenChange, user, isManager = false }: 
             warehousesData={warehousesData}
             isManager={isManager}
             onClose={handleClose}
+            managerWarehouseId={isManager ? (useAuthStore.getState().user?.warehouseId ?? null) : null}
           />
         ) : (
           <CreateForm
@@ -108,6 +110,7 @@ export function EmployeeDialog({ open, onOpenChange, user, isManager = false }: 
             warehousesData={warehousesData}
             isManager={isManager}
             onClose={handleClose}
+            managerWarehouseId={isManager ? (useAuthStore.getState().user?.warehouseId ?? null) : null}
           />
         )}
       </DialogContent>
@@ -126,10 +129,11 @@ function CreateForm({
   warehousesData: { data: { id: string; name: string }[] } | undefined
   isManager: boolean
   onClose: () => void
+  managerWarehouseId: string | null
 }) {
   const form = useForm<CreateValues>({
     resolver: zodResolver(createSchema),
-    defaultValues: { email: '', username: '', password: '', role: Role.STAFF, warehouseId: null },
+    defaultValues: { email: '', username: '', password: '', role: Role.STAFF, warehouseId: managerWarehouseId },
   })
 
   async function onSubmit(values: CreateValues) {
@@ -216,10 +220,11 @@ function EditForm({
   warehousesData: { data: { id: string; name: string }[] } | undefined
   isManager: boolean
   onClose: () => void
+  managerWarehouseId: string | null
 }) {
   const form = useForm<EditValues>({
     resolver: zodResolver(editSchema),
-    defaultValues: { email: user.email, username: user.username, password: '', role: user.role, warehouseId: user.warehouseId },
+    defaultValues: { email: user.email, username: user.username, password: '', role: user.role, warehouseId: isManager ? managerWarehouseId : user.warehouseId },
   })
 
   async function onSubmit(values: EditValues) {

@@ -53,27 +53,28 @@ export function EmployeesPage() {
 // ─── Admin tabbed view ────────────────────────────────────────────────────────
 
 function AdminEmployeesView({ currentUserId }: { currentUserId: string }) {
-  const [managerPage, setManagerPage] = useState(1);
-  const [managerSearch, setManagerSearch] = useState("");
-  const [staffPage, setStaffPage] = useState(1);
-  const [staffSearch, setStaffSearch] = useState("");
+  const [managerParams, setManagerParams] = useState({
+    page: 1, search: "", isBanned: undefined as boolean | undefined, warehouseId: undefined as string | undefined,
+    sortBy: "createdAt" as "username" | "email" | "createdAt" | "updatedAt", sortOrder: "desc" as "asc" | "desc"
+  });
+
+  const [staffParams, setStaffParams] = useState({
+    page: 1, search: "", isBanned: undefined as boolean | undefined, warehouseId: undefined as string | undefined,
+    sortBy: "createdAt" as "username" | "email" | "createdAt" | "updatedAt", sortOrder: "desc" as "asc" | "desc"
+  });
 
   const { data: managerData, isLoading: isManagerLoading } = useUsers({
     role: Role.MANAGER,
-    page: managerPage,
     limit: LIMIT,
-    search: managerSearch || undefined,
-    sortBy: "createdAt",
-    sortOrder: "desc",
+    ...managerParams,
+    search: managerParams.search || undefined,
   });
 
   const { data: staffData, isLoading: isStaffLoading } = useUsers({
     role: Role.STAFF,
-    page: staffPage,
     limit: LIMIT,
-    search: staffSearch || undefined,
-    sortBy: "createdAt",
-    sortOrder: "desc",
+    ...staffParams,
+    search: staffParams.search || undefined,
   });
 
   return (
@@ -103,13 +104,24 @@ function AdminEmployeesView({ currentUserId }: { currentUserId: string }) {
           isLoading={isManagerLoading}
           isAdmin={true}
           currentUserId={currentUserId}
-          page={managerPage}
           total={managerData?.total ?? 0}
           limit={LIMIT}
-          onPageChange={setManagerPage}
-          onSearchChange={(s) => {
-            setManagerSearch(s);
-            setManagerPage(1);
+          page={managerParams.page}
+          onPageChange={(page) => setManagerParams(p => ({ ...p, page }))}
+          onSearchChange={(search) => setManagerParams(p => ({ ...p, search, page: 1 }))}
+          isBannedFilter={managerParams.isBanned}
+          onIsBannedFilterChange={(isBanned) => setManagerParams(p => ({ ...p, isBanned, page: 1 }))}
+          warehouseIdFilter={managerParams.warehouseId}
+          onWarehouseIdFilterChange={(warehouseId) => setManagerParams(p => ({ ...p, warehouseId, page: 1 }))}
+          sortBy={managerParams.sortBy}
+          sortOrder={managerParams.sortOrder}
+          onSortChange={(field) => {
+            setManagerParams(p => {
+              if (p.sortBy === field) {
+                return { ...p, sortOrder: p.sortOrder === 'asc' ? 'desc' : 'asc' };
+              }
+              return { ...p, sortBy: field, sortOrder: 'asc' };
+            });
           }}
         />
       </TabsContent>
@@ -120,13 +132,24 @@ function AdminEmployeesView({ currentUserId }: { currentUserId: string }) {
           isLoading={isStaffLoading}
           isAdmin={true}
           currentUserId={currentUserId}
-          page={staffPage}
           total={staffData?.total ?? 0}
           limit={LIMIT}
-          onPageChange={setStaffPage}
-          onSearchChange={(s) => {
-            setStaffSearch(s);
-            setStaffPage(1);
+          page={staffParams.page}
+          onPageChange={(page) => setStaffParams(p => ({ ...p, page }))}
+          onSearchChange={(search) => setStaffParams(p => ({ ...p, search, page: 1 }))}
+          isBannedFilter={staffParams.isBanned}
+          onIsBannedFilterChange={(isBanned) => setStaffParams(p => ({ ...p, isBanned, page: 1 }))}
+          warehouseIdFilter={staffParams.warehouseId}
+          onWarehouseIdFilterChange={(warehouseId) => setStaffParams(p => ({ ...p, warehouseId, page: 1 }))}
+          sortBy={staffParams.sortBy}
+          sortOrder={staffParams.sortOrder}
+          onSortChange={(field) => {
+            setStaffParams(p => {
+              if (p.sortBy === field) {
+                return { ...p, sortOrder: p.sortOrder === 'asc' ? 'desc' : 'asc' };
+              }
+              return { ...p, sortBy: field, sortOrder: 'asc' };
+            });
           }}
         />
       </TabsContent>
@@ -137,17 +160,17 @@ function AdminEmployeesView({ currentUserId }: { currentUserId: string }) {
 // ─── Manager view — Staff only in their warehouse ─────────────────────────────
 
 function ManagerEmployeesView({ currentUserId }: { currentUserId: string }) {
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
+  const [params, setParams] = useState({
+    page: 1, search: "", isBanned: undefined as boolean | undefined,
+    sortBy: "createdAt" as "username" | "email" | "createdAt" | "updatedAt", sortOrder: "desc" as "asc" | "desc"
+  });
 
   // BE automatically scopes to Manager's warehouse — no warehouseId needed
   const { data, isLoading } = useUsers({
     role: Role.STAFF,
-    page,
     limit: LIMIT,
-    search: search || undefined,
-    sortBy: "createdAt",
-    sortOrder: "desc",
+    ...params,
+    search: params.search || undefined,
   });
 
   return (
@@ -156,13 +179,22 @@ function ManagerEmployeesView({ currentUserId }: { currentUserId: string }) {
       isLoading={isLoading}
       isAdmin={false}
       currentUserId={currentUserId}
-      page={page}
       total={data?.total ?? 0}
       limit={LIMIT}
-      onPageChange={setPage}
-      onSearchChange={(s) => {
-        setSearch(s);
-        setPage(1);
+      page={params.page}
+      onPageChange={(page) => setParams(p => ({ ...p, page }))}
+      onSearchChange={(search) => setParams(p => ({ ...p, search, page: 1 }))}
+      isBannedFilter={params.isBanned}
+      onIsBannedFilterChange={(isBanned) => setParams(p => ({ ...p, isBanned, page: 1 }))}
+      sortBy={params.sortBy}
+      sortOrder={params.sortOrder}
+      onSortChange={(field) => {
+        setParams(p => {
+          if (p.sortBy === field) {
+            return { ...p, sortOrder: p.sortOrder === 'asc' ? 'desc' : 'asc' };
+          }
+          return { ...p, sortBy: field, sortOrder: 'asc' };
+        });
       }}
     />
   );

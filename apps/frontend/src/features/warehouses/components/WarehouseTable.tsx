@@ -76,7 +76,7 @@ export function WarehouseTable({
 
   function handleEdit(wh: WarehouseResponse) {
     setEditingWarehouse(wh)
-    setDialogOpen(true)
+    setTimeout(() => setDialogOpen(true), 150)
   }
 
   function handleAddNew() {

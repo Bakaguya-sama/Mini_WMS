@@ -102,7 +102,7 @@ export function PackageTable({
 
   function handleEdit(pkg: PackageResponse) {
     setEditingPkg(pkg)
-    setDialogOpen(true)
+    setTimeout(() => setDialogOpen(true), 150)
   }
 
   async function handleStatusChangeInline(pkg: PackageResponse, newStatus: PackageStatus) {

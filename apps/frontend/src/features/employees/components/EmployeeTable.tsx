@@ -155,7 +155,7 @@ export function EmployeeTable({
 
   function handleEdit(user: UserResponse) {
     setEditingUser(user)
-    setDialogOpen(true)
+    setTimeout(() => setDialogOpen(true), 150)
   }
 
   function handleAddNew() {

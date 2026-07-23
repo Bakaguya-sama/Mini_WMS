@@ -73,12 +73,6 @@ axiosClient.interceptors.response.use(
     const message: string =
       error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại.";
 
-    // ── Handle 403: Insufficient permissions ──────────────────────────────────
-    if (statusCode === 403) {
-      toast.error("Không đủ quyền thực hiện thao tác này.");
-      return Promise.reject(error);
-    }
-
     // ── Handle 401: Try token refresh ─────────────────────────────────────────
     if (statusCode === 401) {
       // If 401 on login, it's just wrong credentials, don't trigger refresh logic
@@ -150,9 +144,11 @@ axiosClient.interceptors.response.use(
     }
 
     // ── Handle other errors: show toast with server message ───────────────────
-    // Per CONTEXT.md §3: use error.response.data.message (flat, NOT nested)
     if (error.response && statusCode !== 401) {
-      toast.error(message);
+      // Chỉ hiển thị thuộc tính message (raw) từ backend thay vì toàn bộ object
+      const rawMessage = error.response.data?.message;
+      const displayMsg = typeof rawMessage === 'object' ? JSON.stringify(rawMessage) : rawMessage;
+      toast.error(displayMsg || message);
     } else if (!error.response) {
       toast.error(
         "Không thể kết nối đến server. Vui lòng kiểm tra kết nối mạng.",

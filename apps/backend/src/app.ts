@@ -16,42 +16,6 @@ import { env } from "./config/env.config";
 
 const app = express();
 
-app.get(
-  "/api-docs",
-  helmet({ contentSecurityPolicy: false }),
-  (req, res) => {
-    res.type("html").send(`
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Mini WMS API Docs</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui.min.css" />
-  <style>body { margin: 0; }</style>
-</head>
-<body>
-  <div id="swagger-ui"></div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-standalone-preset.min.js"></script>
-  <script>
-    window.onload = () => {
-      window.ui = SwaggerUIBundle({
-        url: "/api-docs.json",
-        dom_id: "#swagger-ui",
-        presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
-        layout: "StandaloneLayout",
-      });
-    };
-  </script>
-</body>
-</html>
-  `);
-  }
-);
-
-app.get("/api-docs.json", (req, res) => {
-  res.json(swaggerSpec);
-});
-
 app.use(helmet());
 const allowedOrigins = env.CORS_ORIGIN
   ? env.CORS_ORIGIN.split(',').map(o => o.trim())
@@ -77,7 +41,16 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json());
 
+app.use(
+  "/api-docs",
+  helmet({ contentSecurityPolicy: false }),
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec),
+);
 
+app.get("/api-docs.json", (req, res) => {
+  res.json(swaggerSpec);
+});
 
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/users", usersRoute);

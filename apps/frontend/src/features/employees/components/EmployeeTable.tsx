@@ -7,6 +7,9 @@ import {
   Trash2,
   Plus,
   Search,
+  ArrowUp,
+  ArrowDown,
+  ArrowUpDown,
 } from 'lucide-react'
 import {
   Table,
@@ -23,6 +26,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -78,6 +88,13 @@ interface EmployeeTableProps {
   limit: number
   onPageChange: (page: number) => void
   onSearchChange: (search: string) => void
+  isBannedFilter?: boolean
+  onIsBannedFilterChange?: (val: boolean | undefined) => void
+  warehouseIdFilter?: string
+  onWarehouseIdFilterChange?: (val: string | undefined) => void
+  sortBy?: 'username' | 'email' | 'createdAt' | 'updatedAt'
+  sortOrder?: 'asc' | 'desc'
+  onSortChange?: (field: 'username' | 'email' | 'createdAt' | 'updatedAt') => void
 }
 
 export function EmployeeTable({
@@ -90,6 +107,13 @@ export function EmployeeTable({
   limit,
   onPageChange,
   onSearchChange,
+  isBannedFilter,
+  onIsBannedFilterChange,
+  warehouseIdFilter,
+  onWarehouseIdFilterChange,
+  sortBy,
+  sortOrder,
+  onSortChange,
 }: EmployeeTableProps) {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingUser, setEditingUser] = useState<UserResponse | undefined>()
@@ -159,12 +183,22 @@ export function EmployeeTable({
     onPageChange(1)
   }
 
+  const renderSortIcon = (field: 'username' | 'email' | 'createdAt' | 'updatedAt') => {
+    if (sortBy !== field) return <ArrowUpDown className="ml-2 h-4 w-4 text-muted-foreground opacity-50" />
+    return sortOrder === 'asc' ? <ArrowUp className="ml-2 h-4 w-4" /> : <ArrowDown className="ml-2 h-4 w-4" />
+  }
+
+  const toggleSort = (field: 'username' | 'email' | 'createdAt' | 'updatedAt') => {
+    if (onSortChange) onSortChange(field)
+  }
+
   return (
     <div className="space-y-4">
       {/* Toolbar */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
-          <div className="relative">
+        <div className="flex items-center gap-2 flex-wrap">
+          <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
+            <div className="relative">
             <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               id="employee-search"
@@ -175,7 +209,48 @@ export function EmployeeTable({
             />
           </div>
           <Button type="submit" variant="outline" className="h-10 px-6">Tìm</Button>
-        </form>
+          </form>
+
+          {/* Filters */}
+          {onIsBannedFilterChange && (
+            <Select
+              value={isBannedFilter === undefined ? 'all' : isBannedFilter ? 'banned' : 'active'}
+              onValueChange={(val) => {
+                if (val === 'all') onIsBannedFilterChange(undefined)
+                else if (val === 'banned') onIsBannedFilterChange(true)
+                else if (val === 'active') onIsBannedFilterChange(false)
+              }}
+            >
+              <SelectTrigger className="w-[140px] h-10">
+                <SelectValue placeholder="Trạng thái" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tất cả trạng thái</SelectItem>
+                <SelectItem value="active">Hoạt động</SelectItem>
+                <SelectItem value="banned">Bị khóa</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+
+          {isAdmin && onWarehouseIdFilterChange && (
+            <Select
+              value={warehouseIdFilter || 'all'}
+              onValueChange={(val) => onWarehouseIdFilterChange(val === 'all' ? undefined : val)}
+            >
+              <SelectTrigger className="w-[180px] h-10">
+                <SelectValue placeholder="Tất cả kho hàng" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tất cả kho hàng</SelectItem>
+                {warehousesData?.data.map((wh) => (
+                  <SelectItem key={wh.id} value={wh.id}>
+                    {wh.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        </div>
 
         <Button id="btn-add-employee" onClick={handleAddNew} className="h-10 px-4">
           <Plus className="mr-1.5 h-4 w-4" />
@@ -188,12 +263,27 @@ export function EmployeeTable({
         <Table>
           <TableHeader className="sticky top-0 bg-muted/50">
             <TableRow>
-              <TableHead>Tên đăng nhập</TableHead>
-              <TableHead>Email</TableHead>
+              <TableHead 
+                className="cursor-pointer hover:bg-muted/80" 
+                onClick={() => toggleSort('username')}
+              >
+                <div className="flex items-center">Tên đăng nhập {renderSortIcon('username')}</div>
+              </TableHead>
+              <TableHead 
+                className="cursor-pointer hover:bg-muted/80" 
+                onClick={() => toggleSort('email')}
+              >
+                <div className="flex items-center">Email {renderSortIcon('email')}</div>
+              </TableHead>
               <TableHead>Vai trò</TableHead>
               <TableHead>Kho</TableHead>
               <TableHead>Trạng thái</TableHead>
-              <TableHead>Ngày tạo</TableHead>
+              <TableHead 
+                className="cursor-pointer hover:bg-muted/80" 
+                onClick={() => toggleSort('createdAt')}
+              >
+                <div className="flex items-center">Ngày tạo {renderSortIcon('createdAt')}</div>
+              </TableHead>
               <TableHead className="text-right w-[80px]">Thao tác</TableHead>
             </TableRow>
           </TableHeader>

@@ -3,9 +3,8 @@ import { PrismaClient } from "../generated/prisma";
 import { PrismaNeon } from "@prisma/adapter-neon";
 import bcrypt from "bcrypt";
 import { PackageStatus } from "@mini-wms/shared-types";
-import { env } from "@/config/env.config";
+import { env } from "../src/config/env.config";
 
-// Reuse the same Neon adapter setup as db.config.ts
 const adapter = new PrismaNeon({
   connectionString: env.DATABASE_URL!,
 });
@@ -24,10 +23,8 @@ async function main() {
   const defaultPassword = await bcrypt.hash("password123", SALT_ROUNDS);
 
   // ─── 1. Admin ─────────────────────────────────────────────────────────────
-  const admin = await prisma.user.upsert({
-    where: { email: "admin@miniwms.com" },
-    update: {},
-    create: {
+  const admin = await prisma.user.create({
+    data: {
       email: "admin@miniwms.com",
       username: "admin",
       password: await bcrypt.hash("admin123", SALT_ROUNDS),
@@ -47,10 +44,8 @@ async function main() {
   const warehouses = [];
 
   for (let i = 0; i < warehouseNames.length; i++) {
-    const warehouse = await prisma.warehouse.upsert({
-      where: { name: warehouseNames[i] },
-      update: {},
-      create: { name: warehouseNames[i] },
+    const warehouse = await prisma.warehouse.create({
+      data: { name: warehouseNames[i] },
     });
     warehouses.push(warehouse);
     console.log(`✅ Warehouse created: ${warehouse.name} (${warehouse.id})`);
@@ -62,11 +57,8 @@ async function main() {
     const managerEmail = `manager${i + 1}@miniwms.com`;
     const staffEmail = `staff${i + 1}@miniwms.com`;
 
-    // Manager
-    await prisma.user.upsert({
-      where: { email: managerEmail },
-      update: {},
-      create: {
+    await prisma.user.create({
+      data: {
         email: managerEmail,
         username: `manager${i + 1}`,
         password: defaultPassword,
@@ -75,11 +67,8 @@ async function main() {
       },
     });
 
-    // Staff
-    await prisma.user.upsert({
-      where: { email: staffEmail },
-      update: {},
-      create: {
+    await prisma.user.create({
+      data: {
         email: staffEmail,
         username: `staff${i + 1}`,
         password: defaultPassword,
@@ -105,17 +94,14 @@ async function main() {
     const wh = warehouses[i];
     const prefix = warehousePrefixes[i];
 
-    // Create 15 packages per warehouse
     for (let j = 1; j <= 15; j++) {
       const code = `PKG-${prefix}-${j.toString().padStart(3, "0")}`;
       const randomStatus =
         statuses[Math.floor(Math.random() * statuses.length)];
-      const randomPrice = Math.floor(Math.random() * 1000) + 10; // $10 to $1010
+      const randomPrice = Math.floor(Math.random() * 1000) + 10;
 
-      await prisma.package.upsert({
-        where: { code },
-        update: {},
-        create: {
+      await prisma.package.create({
+        data: {
           code,
           price: randomPrice,
           status: randomStatus,

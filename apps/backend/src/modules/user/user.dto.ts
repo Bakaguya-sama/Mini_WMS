@@ -53,15 +53,15 @@ export const createUserSchema = z.object({
       username: usernameField,
       password: passwordField,
       role: z.enum(Role),
-      warehouseId: z.uuidv4().optional(),
+      warehouseId: z.uuidv4().nullable().optional(),
     })
     .refine(
       (data) => {
-        const hasWarehouse = data.warehouseId !== undefined;
+        const hasWarehouse = data.warehouseId != null;
         return data.role === Role.ADMIN ? !hasWarehouse : hasWarehouse;
       },
       {
-        error: "Manager/staff must have a warehouseid, except for Admin",
+        message: "Manager/staff must have a warehouseid, except for Admin",
         path: ["warehouseId"],
       },
     ),
@@ -74,7 +74,7 @@ export const updateUserSchema = z.object({
     username: usernameField.optional(),
     password: passwordField.optional(),
     role: z.enum(Role).optional(),
-    warehouseId: z.uuidv4().optional(),
+    warehouseId: z.uuidv4().nullable().optional(),
   }),
 });
 

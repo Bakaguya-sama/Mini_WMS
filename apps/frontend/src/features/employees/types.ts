@@ -33,7 +33,6 @@ export interface CreateUserInput {
 export interface UpdateUserInput {
   email?: string
   username?: string
-  password?: string
   role?: Role
   warehouseId?: string | null
 }

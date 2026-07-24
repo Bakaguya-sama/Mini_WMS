@@ -38,7 +38,10 @@ export const findUsersByFilterSchema = z.object({
     warehouseId: z.uuidv4().optional(),
     role: z.enum(Role).optional(),
     isBanned: z
-      .union([z.boolean(), z.enum(["true", "false"]).transform((v) => v === "true")])
+      .union([
+        z.boolean(),
+        z.enum(["true", "false"]).transform((v) => v === "true"),
+      ])
       .optional(),
     search: z.string().min(1).optional(),
     sortBy: z.enum(sortFields).default("username"),
@@ -72,10 +75,13 @@ export const updateUserSchema = z.object({
   body: z.object({
     email: emailField.optional(),
     username: usernameField.optional(),
-    password: passwordField.optional(),
     role: z.enum(Role).optional(),
     warehouseId: z.uuidv4().nullable().optional(),
   }),
+});
+
+export const resetPasswordForEmployeeSchema = z.object({
+  params: z.object({ id: z.uuidv4() }),
 });
 
 export const updateProfileSchema = z.object({
@@ -90,5 +96,5 @@ export const updateProfileSchema = z.object({
 
 export type CreateUserDto = z.infer<typeof createUserSchema>["body"];
 export type UpdateUserDto = z.infer<typeof updateUserSchema>["body"];
-export type UpdateProfileDto = z.infer<typeof updateUserSchema>["body"];
+export type UpdateProfileDto = z.infer<typeof updateProfileSchema>["body"];
 export type UserFilter = z.infer<typeof findUsersByFilterSchema>["query"];

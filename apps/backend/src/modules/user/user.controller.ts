@@ -42,6 +42,15 @@ class UserController {
     });
   }
 
+  resetPasswordForEmployee() {
+    return asyncHandler(async (req: Request, res: Response) => {
+      const id = req.params.id as string;
+      const result = await userService.resetPasswordForEmployee(id, req.user);
+
+      res.status(200).json(success(result));
+    });
+  }
+
   getProfile() {
     return asyncHandler(async (req: Request, res: Response) => {
       const result = await userService.getProfile(req.user);

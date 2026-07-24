@@ -60,7 +60,7 @@ class UserService {
 
     if (dto.warehouseId !== undefined) {
       const warehouse = await warehouseRepository.findWarehouseById(
-        dto.warehouseId,
+        dto.warehouseId!,
       );
       if (!warehouse) throw new AppError(404, "Warehouse does not exist");
     }
@@ -83,21 +83,65 @@ class UserService {
 
     canManageUserTarget(currentUser, target);
 
-    const dataToUpdate = { ...dto };
-    if (dto.password) {
-      dataToUpdate.password = await bcrypt.hash(dto.password, 10);
+    if (currentUser.role === Role.MANAGER) {
+      if (dto.role !== undefined && dto.role !== Role.STAFF) {
+        throw new AppError(403, "Manager can only manage Staff role");
+      }
+      if (
+        dto.warehouseId !== undefined &&
+        dto.warehouseId !== currentUser.warehouseId
+      ) {
+        throw new AppError(
+          403,
+          "Manager cannot transfer employees to another warehouse",
+        );
+      }
     }
 
-    if (dto.warehouseId !== undefined) {
+    const finalRole = dto.role ?? target.role;
+    const finalWarehouseId =
+      dto.warehouseId !== undefined ? dto.warehouseId : target.warehouseId;
+
+    if (finalRole === Role.ADMIN && finalWarehouseId) {
+      throw new AppError(400, "Admin cannot have a warehouseId");
+    }
+    if (finalRole !== Role.ADMIN && !finalWarehouseId) {
+      throw new AppError(400, "Manager/Staff must have a warehouseId");
+    }
+
+    if (
+      dto.warehouseId !== undefined &&
+      dto.warehouseId !== target.warehouseId
+    ) {
       const warehouse = await warehouseRepository.findWarehouseById(
-        dto.warehouseId,
+        dto.warehouseId!,
       );
       if (!warehouse) throw new AppError(404, "Warehouse does not exist");
     }
 
+    if (dto.email !== undefined && dto.email !== target.email) {
+      const existing = await userRepository.findUserByEmail(dto.email);
+      if (existing) throw new AppError(409, "Email already registered");
+    }
+
+    const dataToUpdate = { ...dto };
     const updated = await userRepository.updateUser(id, dataToUpdate);
     if (!updated) throw new AppError(404, "User does not exist");
     return this.mapUserToResponse(updated);
+  }
+
+  async resetPasswordForEmployee(id: string, currentUser: AuthenticatedUser) {
+    const target = await userRepository.findUserById(id);
+    if (!target) throw new AppError(404, "User does not exist");
+
+    canManageUserTarget(currentUser, target);
+
+    const tempPassword = Math.floor(100000 + Math.random() * 900000).toString();
+    await userRepository.updateUser(id, {
+      password: await bcrypt.hash(tempPassword, 10),
+    });
+
+    return { tempPassword };
   }
 
   async getProfile(currentUser: AuthenticatedUser) {
